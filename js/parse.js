@@ -4,7 +4,6 @@
 	var arrFromStr = function(str) { // Turns strings separated by chars in sepChars into arrays
 		for( var c of sepChars ) str = str.replace(new RegExp(c, "g"), '|');
 		var arr = str.split('|');
-		console.log(arr);
 		for (var i in arr) {
 			if (!arr[i]) {
 				delete arr[i];
@@ -18,7 +17,6 @@
 				return false;
 			})
 		}
-		console.log(arr);
 		return arr;
 	}
 	var parseDexFunctions = { // list of functions to get stringified values for each pokedex.js property
@@ -71,7 +69,6 @@
 		stats: function(stats) {
 			stats = stats.replace(/[a-z]/g, '');
 			var statArr = arrFromStr(stats);
-			console.log( statArr );
 			var buf = '{hp: ' + statArr[0];
 			if (statArr[1]) buf += ', atk: ' + statArr[1];
 			if (statArr[2]) buf += ', def: ' + statArr[2];
@@ -149,7 +146,6 @@
 		for (var key in settings.dataInputTypes) {
 			if (settings.dataInputTypes[key]) parsedData[key] = parseDexColumn(key, ids);
 		}
-		// console.log( parsedData );
 		return parsedData;
 	};
 
@@ -188,7 +184,6 @@
 	global.getPokedexJS = function(){
 		var indent = 1;
 		var pData = parseDexInputs();
-		console.log(pData);
 		var toOutput = getOutputProps();
 		var buf = "";
 		for (var id of pData.ids) {
@@ -197,7 +192,6 @@
 			// inherit
 			buf += newLine(`inherit: true,`, indent + 1);
 			for (var key of toOutput) {
-				console.log(key);
 				if (pData[key] && pData[key][id]) {
 					buf += newLine(`${outputStr[key]}: ${pData[key][id]},`, indent + 1);
 				}
