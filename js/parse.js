@@ -12,8 +12,8 @@
 			arr[i] = arr[i].trim();
 			arr[i].replace(arr[i].charAt(0), arr[i].charAt(0).toUpperCase());
 			arr = arr.filter(function(el) {
-				if (el.replace(/\s/g, '') === '') return false;
-				if (toID(el) === '') return false;
+				if (el.replace(/\s/g, '') === '') return false;;
+				if (toID(el) === '' && isNaN(el)) return false;
 				if (el) return true;
 				return false;
 			})
@@ -21,7 +21,7 @@
 		return arr;
 	};
 	var toID = function(str) {
-		return str.toLowerCase().replace(/[^a-z]+/g, '');
+		return str.toLowerCase().replace(/[^a-z0-9]+/g, '');
 	};
 	var parseDexFunctions = { // list of functions to get stringified values for each pokedex.js property
 		getIDs: function() { // gets a list of pokemon ids for the exported code
