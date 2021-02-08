@@ -21,7 +21,7 @@
 		return arr;
 	};
 	var toID = function(str) {
-		str = str.toLowerCase().replace(/\s/g, '');
+		str = str.toLowerCase().replace(/\s/g, '').replace(/-/g, '');
 		if (str) for( var c of removeChars) str = str.replace(new RegExp(c, "g"), '');
 		if (str) for( var c of sepChars) str = str.replace(new RegExp(c, "g"), '');
 		return str;
