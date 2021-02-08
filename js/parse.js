@@ -22,8 +22,8 @@
 	};
 	var toID = function(str) {
 		str = str.toLowerCase().replace(/\s/g, '');
-		if (str) for( var c of removeChars) arr[i] = arr[i].replace(new RegExp(c, "g"), '');
-		if (str) for( var c of sepChars) arr[i] = arr[i].replace(new RegExp(c, "g"), '');
+		if (str) for( var c of removeChars) str = str.replace(new RegExp(c, "g"), '');
+		if (str) for( var c of sepChars) str = str.replace(new RegExp(c, "g"), '');
 		return str;
 	};
 	var parseDexFunctions = { // list of functions to get stringified values for each pokedex.js property
