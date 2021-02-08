@@ -195,6 +195,7 @@
 		var toOutput = getOutputProps();
 		var buf = "";
 		for (var id of pData.ids) {
+			if (id === undefined) continue;
 			// id and open bracket
 			buf += newLine(`${id}: {`, indent);
 			// inherit
@@ -214,6 +215,7 @@
 		var buf = "";
 		for (var id of pData.ids) {
 			// id and open bracket
+			if (id === undefined) continue;
 			buf += newLine(`${id}: {`, indent);
 			buf += newLine("learnset: {", indent + 1)
 			// inherit
@@ -240,6 +242,7 @@
 		if (!pData) pData = global.parseDexInputs();
 		var buf = "";
 		for (var id of pData.ids) {
+			if (id === undefined) continue;
 			var name = pData.name[id] ? pData.name[id] : id;
 			buf += newLine(`// ${name}`, indent);
 			var key = "moveAdditions";
