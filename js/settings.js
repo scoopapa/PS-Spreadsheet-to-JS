@@ -1,5 +1,11 @@
 var settings = {};
-settings.dataInputTypes = {
+settings.dex = {
+	columnInput: true,
+	dexIndent: 1,
+	learnsetsIndent: 1,
+	scriptsIndent: 1,
+};
+settings.dex.dataInputTypes = {
 	name: true,
 	types: true,
 	abilities: true,
@@ -12,4 +18,4 @@ settings.dataInputTypes = {
 	prevo: false,
 	gender: false,
 	eggGroups: false,
-}
+};

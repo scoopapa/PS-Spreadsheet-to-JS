@@ -1,8 +1,23 @@
 <div class="input-section">
 	<h2>Choose data types to input:</h2>
 	{{content}}
+</div>
+<div class="input-section">
+	<h2>Choose Input Style:</h2>
+	<div class="radio-section">
+		<label class="radio" for="radio-column-dex">
+			<div class="input-selection-row"> Column Input
+				<input type="radio" name="input" id="radio-column-dex" {{column}}></input></br>
+			</div>
+		</label>
+		<label class="radio" for="radio-single-dex">
+			<div class="input-selection-row"> Single Input
+				<input type="radio" name="input" id="radio-single-dex" {{single}}></input></br>
+			</div>
+		</label>
+	</div>
 	<div class="buttons">
-		<button type="button" id="home-button">Back</button>
-		<button type="button" id="input-settings-button">Next</button>
+		<button type="button" id="home-button">Main Menu</button>
+		<button type="button" id="input-settings-button">Enter Data</button>
 	</div>
 </div>

@@ -1,6 +1,6 @@
 (function(global) {
-	var sepChars = ['/',',','\t','/.','-','\\\\',':',';'];
-	var removeChars = ['\\*','&','$','@','!','#','\\(','\\)','\\{','\\}','\\[','\\]','~','`','~','"',"'"];
+	var sepChars = ['/',',','\t','/.','\\\\',':',';'];
+	var removeChars = ['\\*','&','$','@','!','#','\\(','\\)','\\{','\\}','\\[','\\]','~','`','~','"',"'","none","---","----","-----"];
 	var arrFromStr = function(str) { // Turns strings separated by chars in sepChars into arrays
 		for( var c of sepChars ) str = str.replace(new RegExp(c, "g"), '|');
 		var arr = str.split('|');
@@ -13,22 +13,26 @@
 			arr[i].replace(arr[i].charAt(0), arr[i].charAt(0).toUpperCase());
 			arr = arr.filter(function(el) {
 				if (el.replace(/\s/g, '') === '') return false;
+				if (toID(el) === '') return false;
 				if (el) return true;
 				return false;
 			})
 		}
 		return arr;
-	}
+	};
+	var toID = function(str) {
+		return str.toLowerCase().replace(/[^a-z]+/g, '');
+	};
 	var parseDexFunctions = { // list of functions to get stringified values for each pokedex.js property
 		getIDs: function() { // gets a list of pokemon ids for the exported code
 			var ids = data.inputData.name.split('\n');
 			if (ids[0]) {
 				for (let i in ids) {
-					ids[i] = ids[i].toLowerCase().replace(/[^a-z0-9]+/g, '');
+					ids[i] = toID(ids[i]);
 					if (!ids[i]) delete ids[i];
 				}
 			} else { // if name list is not given, create dummy ids based on the first property that has data
-				for (var key in settings.dataInputTypes) {
+				for (var key in settings.dex.dataInputTypes) {
 					var arr = data.inputData[key].split('\n');
 					if (arr[0]) {
 						for (let i in arr) {
@@ -44,7 +48,7 @@
 		},
 		// parsing functions
 		name: function(name) {
-			return name.replace(/[0-9]+/g, '');
+			return name.trim();
 		},
 		types: function(types) {
 			var typeArr = arrFromStr(types);
@@ -78,12 +82,16 @@
 			buf += '}';
 			return buf;
 		},
-		// moveAdditions and moveRemovals return objects
+		// moveAdditions and moveRemovals return arrays instead of strings
 		moveAdditions: function(moveStr) {
-			return arrFromStr(moveStr);
+			var arr = arrFromStr(moveStr);
+			for (var i in arr) arr[i] = toID(arr[i]);
+			return arr;
 		},
 		moveRemovals: function(moveStr) {
-			return arrFromStr(moveStr);
+			var arr = arrFromStr(moveStr);
+			for (var i in arr) arr[i] = toID(arr[i]);
+			return arr;
 		},
 		weight: function(weight) {
 			return weight.replace(/[a-z]/g, '').trim();
@@ -118,15 +126,18 @@
 		},
 	};
 	var parseDexColumn = function(key, ids) {
-		var arr = data.inputData[key].split('\n');
+		var arr = data.inputData[key].split('\n'); // separate each input into an array by newline char, then parse each element individually
 		var obj = {};
 		for (let i in ids) {
-			if (arr[i]) for( var c of removeChars ) arr[i] = arr[i].replace(new RegExp(c, "g"), '');
+			if (arr[i]) for( var c of removeChars) arr[i] = arr[i].replace(new RegExp(c, "g"), '');
 			if (arr[i]) obj[ids[i]] = parseDexFunctions[key](arr[i]);
 		};
 		return obj;
 	};
-	var parseDexInputs = function() {
+	var processData = function(pData) { // takes parsed data and figures out forme changes
+		
+	};
+	global.parseDexInputs = function() {
 		var parsedData = {
 			name: {},
 			types: {},
@@ -143,8 +154,8 @@
 		};
 		var ids = parseDexFunctions.getIDs();
 		parsedData.ids = ids;
-		for (var key in settings.dataInputTypes) {
-			if (settings.dataInputTypes[key]) parsedData[key] = parseDexColumn(key, ids);
+		for (var key in settings.dex.dataInputTypes) {
+			if (settings.dex.dataInputTypes[key]) parsedData[key] = parseDexColumn(key, ids);
 		}
 		return parsedData;
 	};
@@ -166,14 +177,8 @@
 	};
 	var getOutputProps = function() {
 		return [
-			// 'num',
-			'name',
-			'types',
-			// 'gender',
-			'stats',
-			'abilities',
-			// 'height', 'weight', 'color', 
-			// 'prevo', 'evos', 'eggGroups'
+			'num', 'name', 'types', 'gender', 'stats', 'abilities',
+			'height', 'weight', 'color', 'prevo', 'evos', 'eggGroups'
 		];
 	};
 	var newLine = function(str, indent) {
@@ -181,9 +186,9 @@
 		for (var i = 1; i <= indent; i++) buf += '\t';
 		return buf + str + '\n';
 	};
-	global.getPokedexJS = function(){
-		var indent = 1;
-		var pData = parseDexInputs();
+	global.getPokedexJS = function(pData){
+		var indent = settings.dex.dexIndent;
+		if (!pData) pData = global.parseDexInputs();
 		var toOutput = getOutputProps();
 		var buf = "";
 		for (var id of pData.ids) {
@@ -192,11 +197,60 @@
 			// inherit
 			buf += newLine(`inherit: true,`, indent + 1);
 			for (var key of toOutput) {
-				if (pData[key] && pData[key][id]) {
+				if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
 					buf += newLine(`${outputStr[key]}: ${pData[key][id]},`, indent + 1);
 				}
 			}
 			buf += newLine(`},`, indent);
+		}
+		return buf;
+	}
+	global.getLearnsetsJS = function(pData) {
+		var indent = settings.dex.learnsetsIndent;
+		if (!pData) pData = global.parseDexInputs();
+		var buf = "";
+		for (var id of pData.ids) {
+			// id and open bracket
+			buf += newLine(`${id}: {`, indent);
+			buf += newLine("learnset: {", indent + 1)
+			// inherit
+			buf += newLine(`inherit: true,`, indent + 2);
+			var key = "moveAdditions";
+			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
+				for (var moveid of pData[key][id]) {
+					buf += newLine(`${moveid}: ["8L1"],`, indent + 2);
+				}
+			}
+			key = "moveRemovals";
+			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
+				for (var moveid of pData[key][id]) {
+					buf += newLine(`${moveid}: null,`, indent + 2);
+				}
+			}
+			buf += newLine(`},`, indent + 1);
+			buf += newLine(`},`, indent);
+		}
+		return buf;
+	}
+	global.getScriptsJS = function(pData) {
+		var indent = settings.dex.scriptsIndent;
+		if (!pData) pData = global.parseDexInputs();
+		var buf = "";
+		for (var id of pData.ids) {
+			var name = pData.name[id] ? pData.name[id] : id;
+			buf += newLine(`// ${name}`, indent);
+			var key = "moveAdditions";
+			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
+				for (var moveid of pData[key][id]) {
+					buf += newLine(`this.modData("Learnsets", "${id}").learnset.${moveid} = ["8L1"];`, indent);
+				}
+			}
+			key = "moveRemovals";
+			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
+				for (var moveid of pData[key][id]) {
+					buf += newLine(`delete this.modData('Learnsets', '${id}').learnset.${moveid};`, indent);
+				}
+			}
 		}
 		return buf;
 	}
