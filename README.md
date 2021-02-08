@@ -5,10 +5,12 @@ Todo:
 
 debug single input mode
 
-Implement settings page
+Implement general settings page
 
 Implement gender
 
 Implement megas if name has "Mega " at the start or "-Mega" at the end
 
 Implement Regional Formes based on the above rule but with region names
+
+Implement formes in general (i.e. Breeding Variants)
