@@ -3,7 +3,7 @@ Tools for mass generating content code for Pokemon Showdown mods from spreadshee
 
 Todo:
 
-debug single input
+debug single input mode
 
 Implement settings page
 
