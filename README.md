@@ -7,6 +7,8 @@ debug single input mode
 
 Implement general settings page
 
+Save settings in cookies
+
 Implement gender
 
 Implement megas if name has "Mega " at the start or "-Mega" at the end
