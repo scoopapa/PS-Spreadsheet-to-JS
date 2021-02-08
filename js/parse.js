@@ -21,7 +21,10 @@
 		return arr;
 	};
 	var toID = function(str) {
-		return str.toLowerCase().replace(/[^a-z0-9]+/g, '');
+		str = str.toLowerCase().replace(/\s/g, '');
+		(if str) for( var c of removeChars) arr[i] = arr[i].replace(new RegExp(c, "g"), '');
+		(if str) for( var c of sepChars) arr[i] = arr[i].replace(new RegExp(c, "g"), '');
+		return 
 	};
 	var parseDexFunctions = { // list of functions to get stringified values for each pokedex.js property
 		getIDs: function() { // gets a list of pokemon ids for the exported code
