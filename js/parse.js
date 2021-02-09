@@ -381,11 +381,11 @@
 			
 			var key = "tier";
 			var val = pData[key][id] || settings.dex.defaultTier;
-			buf += newLine(`${key}: ${val},`, indent + 1);
+			buf += newLine(`${key}: "${val}",`, indent + 1);
 			
 			key = "doublesTier";
 			val = pData[key][id] || settings.dex.defaultDoublesTier;
-			buf += newLine(`${key}: ${val},`, indent + 1);
+			buf += newLine(`${key}: "${val}",`, indent + 1);
 			
 			buf += newLine(`},`, indent);
 		}
