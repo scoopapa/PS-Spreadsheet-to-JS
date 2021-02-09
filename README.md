@@ -2,7 +2,6 @@
 Tools for mass generating content code for Pokemon Showdown mods from spreadsheets
 
 Todo:
-Implement general settings page
 
 Create options for handling learnset inheritance for movepool removals
 
