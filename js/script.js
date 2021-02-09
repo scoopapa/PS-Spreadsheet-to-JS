@@ -144,12 +144,15 @@ document.addEventListener("DOMContentLoaded",
 		// Button Code
 		var saveInputData = function(page = "", row = -1) {
 			var tagN = page === "data-column-input-main" ? "textarea" : "input"; // handles column and single input
+			console.log(page);
+			console.log(tagN);
 			if (page) {
 				var fields = document.getElementsByTagName(tagN);
 				for (var field of fields) {
 					if (typeof(data.inputData[field.id]) !== "string") return;
 					if (page === "data-single-input-main") {
 						if (field.value) {
+							console.log( field.value );
 							if (row === -1) data.inputData[field.id] += '\n' + field.value;
 						}
 					} else {

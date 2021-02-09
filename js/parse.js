@@ -24,21 +24,23 @@
 		str = str.toLowerCase().replace(/\s/g, '').replace(/-/g, '');
 		if (str) for( var c of removeChars) str = str.replace(new RegExp(c, "g"), '');
 		if (str) for( var c of sepChars) str = str.replace(new RegExp(c, "g"), '');
+		console.log(str);
 		return str;
 	};
 	var parseDexFunctions = { // list of functions to get stringified values for each pokedex.js property
 		getIDs: function() { // gets a list of pokemon ids for the exported code
 			var ids = data.inputData.name.split('\n');
-			if (ids[0]) {
-				for (let i in ids) {
+			if (ids[0] !== undefined) {
+				for (var i in ids) {
 					ids[i] = toID(ids[i]);
+					console.log(ids[i]);
 					if (!ids[i]) delete ids[i];
 				}
 			} else { // if name list is not given, create dummy ids based on the first property that has data
 				for (var key in settings.dex.dataInputTypes) {
 					var arr = data.inputData[key].split('\n');
 					if (arr[0]) {
-						for (let i in arr) {
+						for (var i in arr) {
 							let j = Number(i) + 1;
 							ids[i] = "pkmn" + j;
 							if (!arr[i]) delete ids[i];
@@ -47,6 +49,7 @@
 					}
 				}
 			}
+			console.log(ids);
 			return ids;
 		},
 		// parsing functions
@@ -152,20 +155,25 @@
 		}
 		var getForme = function(name) {
 			let nameArr = ["", name];
+			var forme = false;
 			if (!name.includes(" ") && !name.includes("-")) return nameArr;
 			if (name.includes(" ")) {
 				nameArr = [ name.slice(0, name.indexOf(" ")), name.slice(name.indexOf(" ") + 1)];
-			} else if (name.includes("-")) {
+			} 
+			if (name.includes("-")) {
 				nameArr = [ name.slice(name.lastIndexOf("-") + 1), name.slice(0, name.lastIndexOf("-")) ];
+				forme = true;
 			}
 			if ( toID(nameArr[0]) === "mega" ) return nameArr;
 			for (var regionid in data.regions) {
 				if (data.regions[regionid].iden.includes( toID(nameArr[0]) )) {
 					nameArr[0] = data.regions[regionid].name;
+					forme = true;
 					break;
 				}
 			}
-			return nameArr;
+			if (forme) return nameArr;
+			else return ["", name];
 		}
 		var getFormes = function(name) {
 			var formeList = [];
@@ -204,7 +212,7 @@
 					for (var table in pData) {
 						if (pData[table][id]) {
 							if (table === 'name') pData[table][newID] = extraData.baseSpecies[id] + '-' + extraData.forme[id];
-							else if (table.slice(0,4) === 'move') pData[table][newID] = {...pData[table][id]};
+							else if (table.slice(0,4) === 'move') pData[table][newID] = [].concat(pData[table][id]);
 							else if (
 								!(table === "baseSpecies" || table === "forme") ||
 								!(
@@ -231,10 +239,12 @@
 		}
 		var ids = parseDexFunctions.getIDs();
 		parsedData.ids = ids;
+		console.log(ids);
 		for (var key in settings.dex.dataInputTypes) {
 			if (settings.dex.dataInputTypes[key]) parsedData[key] = parseDexColumn(key, ids);
 		}
 		parsedData = processData(parsedData);
+		console.log(ids);
 		return parsedData;
 	};
 
