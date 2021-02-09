@@ -170,7 +170,7 @@ document.addEventListener("DOMContentLoaded",
 		// Header Bar Buttons
 		document.getElementById("home-link").addEventListener( "click", function(e){
 			loadMainMenu();
-			saveInputSettings(currentPage);
+			saveInputSettings( currentPage );
 		})
 		// Content Buttons
 		document.getElementById("current-page").addEventListener( "click", function(e){
