@@ -127,6 +127,9 @@
 			buf += ']';
 			return buf;
 		},
+		tier: function(tier) {
+			return tier.trim();
+		},
 	};
 	var parseDexColumn = function(key, ids) {
 		var arr = data.inputData[key].split('\n'); // separate each input into an array by newline char, then parse each element individually
@@ -138,28 +141,97 @@
 		return obj;
 	};
 	var processData = function(pData) { // takes parsed data and figures out forme changes
-		
+		var extraData = {
+			baseSpecies: {},
+			otherFormes: {},
+			formeOrder: {},
+			forme: {},
+		}
+		var getForme = function(name) {
+			let nameArr = ["", name];
+			if (!name.includes(" ") && !name.includes("-")) return nameArr;
+			if (name.includes(" ")) {
+				nameArr = [ name.slice(0, name.indexOf(" ")), name.slice(name.indexOf(" ") + 1)];
+			} else if (name.includes("-")) {
+				nameArr = [ name.slice(name.lastIndexOf("-") + 1), name.slice(0, name.lastIndexOf("-")) ];
+			}
+			if ( toID(nameArr[0]) === "mega" ) return nameArr;
+			for (var regionid in data.regions) {
+				if (data.regions[regionid].iden.includes( toID(nameArr[0]) )) {
+					nameArr[0] = data.regions[regionid].name;
+					break;
+				}
+			}
+			return nameArr;
+		}
+		var getFormes = function(name) {
+			var formeList = [];
+			var res = getForme(name);
+			while (res[0] !== "") {
+				formeList.push(res[0]);
+				res = getForme(res[1]);
+			}
+			var buf = "";
+			for (var forme of formeList) {
+				buf += forme + '-';
+			}
+			buf = buf.slice(0, buf.lastIndexOf("-"));
+			var toReturn = {
+				baseSpecies: res[1],
+				forme: buf,
+			}
+			return toReturn;
+		}
+		var doDexProcess = function() {
+			for (var id of pData.ids) {
+				if (!pData.name[id]) continue;
+				if (data.dexInfo && id in data.dexInfo) continue;
+				var formeData = getFormes( pData.name[id] );
+				if (formeData.baseSpecies !== pData.name[id]) {
+					extraData.baseSpecies[id] = formeData.baseSpecies;
+					extraData.forme[id] = formeData.forme;
+				}
+			}
+			pData.baseSpecies = extraData.baseSpecies;
+			pData.forme = extraData.forme;
+			
+			for (var id in extraData.forme) {
+				let newID = toID(extraData.baseSpecies[id]) + toID(extraData.forme[id]);
+				if (id !== newID) {
+					for (var table in pData) {
+						if (pData[table][id]) {
+							if (table === 'name') pData[table][newID] = extraData.baseSpecies[id] + '-' + extraData.forme[id];
+							else if (table.slice(0,4) === 'move') pData[table][newID] = {...pData[table][id]};
+							else if (
+								!(table === "baseSpecies" || table === "forme") ||
+								!(
+									(toID(pData["forme"][id]) in data.regions) ||
+									(data.dexInfo && id in data.dexInfo)
+								)
+							) {
+								pData[table][newID] = pData[table][id];
+							}
+							delete pData[table][id];
+						}
+					}
+					pData.ids.splice(pData.ids.indexOf(id), 1, newID);
+				}
+			}
+		}
+		doDexProcess();
+		return pData;
 	};
 	global.parseDexInputs = function() {
-		var parsedData = {
-			name: {},
-			types: {},
-			abilities: {},
-			stats: {},
-			moveAdditions: {},
-			moveRemovals: {},
-			weight: {},
-			height: {},
-			evos: {},
-			prevo: {},
-			gender: {},
-			eggGroups: {},
-		};
+		var parsedData = {};
+		for (var iType in data.inputTypes) {
+			parsedData[iType] = {};
+		}
 		var ids = parseDexFunctions.getIDs();
 		parsedData.ids = ids;
 		for (var key in settings.dex.dataInputTypes) {
 			if (settings.dex.dataInputTypes[key]) parsedData[key] = parseDexColumn(key, ids);
 		}
+		parsedData = processData(parsedData);
 		return parsedData;
 	};
 
@@ -167,6 +239,8 @@
 		inherit: "inherit",
 		num: "num",
 		name: "name",
+		baseSpecies: "baseSpecies",
+		forme: "forme",
 		types: "types",
 		gender: "genderRatio",
 		stats: "baseStats",
@@ -180,8 +254,9 @@
 	};
 	var getOutputProps = function() {
 		return [
-			'num', 'name', 'types', 'gender', 'stats', 'abilities',
-			'height', 'weight', 'color', 'prevo', 'evos', 'eggGroups'
+			'num', 'name', 'baseSpecies', 'forme', 'types', 'gender', 
+			'stats', 'abilities', 'height', 'weight', 'color', 'prevo', 
+			'evos', 'eggGroups'
 		];
 	};
 	var newLine = function(str, indent) {
@@ -195,11 +270,11 @@
 		var toOutput = getOutputProps();
 		var buf = "";
 		for (var id of pData.ids) {
-			if (id === undefined) continue;
+			if (!id) continue;
 			// id and open bracket
 			buf += newLine(`${id}: {`, indent);
 			// inherit
-			buf += newLine(`inherit: true,`, indent + 1);
+			if (id in data.dexInfo) buf += newLine(`inherit: true,`, indent + 1);
 			for (var key of toOutput) {
 				if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
 					buf += newLine(`${outputStr[key]}: ${pData[key][id]},`, indent + 1);
@@ -215,11 +290,11 @@
 		var buf = "";
 		for (var id of pData.ids) {
 			// id and open bracket
-			if (id === undefined) continue;
+			if (!id) continue;
 			buf += newLine(`${id}: {`, indent);
 			buf += newLine("learnset: {", indent + 1)
 			// inherit
-			buf += newLine(`inherit: true,`, indent + 2);
+			if (id in data.dexInfo) buf += newLine(`inherit: true,`, indent + 2);
 			var key = "moveAdditions";
 			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
 				for (var moveid of pData[key][id]) {
@@ -242,7 +317,8 @@
 		if (!pData) pData = global.parseDexInputs();
 		var buf = "";
 		for (var id of pData.ids) {
-			if (id === undefined) continue;
+			if (!id) continue;
+			if (id in data.dexInfo === false) continue;
 			var name = pData.name[id] ? pData.name[id] : id;
 			buf += newLine(`// ${name}`, indent);
 			var key = "moveAdditions";
@@ -257,6 +333,34 @@
 					buf += newLine(`delete this.modData('Learnsets', '${id}').learnset.${moveid};`, indent);
 				}
 			}
+		}
+		return buf;
+	}
+	global.getFormatsDataJS = function(pData) {
+		var indent = settings.dex.scriptsIndent;
+		if (!pData) pData = global.parseDexInputs();
+		var buf = "";
+		for (var id of pData.ids) {
+			if (!id) continue;
+			if ((
+					( settings.dex.useDefaultTier === "fakeOnly" && id in data.dexInfo ) || 
+					( settings.dex.useDefaultTier === 'none' )
+				) &&
+				(!pData[key] || !pData[key][id] || !settings.dex.dataInputTypes[key])
+			) continue;
+			// id and open bracket
+			buf += newLine(`${id}: {`, indent);
+			var key = "tier";
+			var val = pData[key][id] || settings.dex.defaultTier;
+			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
+				buf += newLine(`${key}: ${val},`, indent + 1);
+			}
+			key = "doublesTier";
+			val = pData[key][id] || settings.dex.defaultDoublesTier;
+			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
+				buf += newLine(`${key}: ${val},`, indent + 1);
+			}
+			buf += newLine(`},`, indent);
 		}
 		return buf;
 	}
