@@ -290,7 +290,7 @@
 			if (id in data.dexInfo) buf += newLine(`inherit: true,`, indent + 1);
 			for (var key of toOutput) {
 				if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
-					buf += newLine(`${outputStr[key]}: ${pData[key][id]},`, indent + 1);
+					buf += newLine(`${outputStr[key]}: "${pData[key][id]}",`, indent + 1);
 				}
 			}
 			buf += newLine(`},`, indent);
