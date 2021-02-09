@@ -34,6 +34,11 @@ document.addEventListener("DOMContentLoaded",
 					var buf = "";
 					rStr = insertProperty(rStr, "column", settings.dex.columnInput ? "checked" : "");
 					rStr = insertProperty(rStr, "single", !settings.dex.columnInput ? "checked" : "");
+					rStr = insertProperty(rStr, "all", settings.dex.useDefaultTier === "all" ? "checked" : "");
+					rStr = insertProperty(rStr, "fake", settings.dex.useDefaultTier === "fakeOnly" ? "checked" : "");
+					rStr = insertProperty(rStr, "none", settings.dex.useDefaultTier === "none" ? "checked" : "");
+					rStr = insertProperty(rStr, "tier", settings.dex.defaultTier);
+					rStr = insertProperty(rStr, "doublesTier", settings.dex.defaultDoublesTier);
 					for (var key in data.inputTypes) {
 						item = r;
 						item = insertProperty(item, "id", key);
@@ -153,6 +158,14 @@ document.addEventListener("DOMContentLoaded",
 				}
 			}
 		};
+		var saveInputSettings = function(page = "") {
+			if (page !== "data-input-select-pkmn") return;
+			var fields = document.getElementsByTagName("input");
+			for (var field of fields) {
+				if (field.id === "default-tier-input") settings.dex.defaultTier = field.value;
+				if (field.id === "default-doubles-tier-input") settings.dex.defaultDoublesTier = field.value;
+			}
+		}
 		// Header Bar Buttons
 		document.getElementById("home-link").addEventListener( "click", function(e){
 			loadMainMenu();
@@ -176,15 +189,30 @@ document.addEventListener("DOMContentLoaded",
 						return;
 					}
 				}
-				// Single or Column Select radio buttons
+				// Radio buttons
 				var id = "radio-column-dex";
 				if (e.target.id === id || (e.target.lastChild !== null && e.target.lastChild.id === id)) settings.dex.columnInput = true;
 				id = "radio-single-dex";
 				if (e.target.id === id || (e.target.lastChild !== null && e.target.lastChild.id === id)) settings.dex.columnInput = false;
+				var id = "radio-tier-all";
+				if (e.target.id === id || (e.target.lastChild !== null && e.target.lastChild.id === id)) 
+					settings.dex.useDefaultTier = "all";
+				id = "radio-tier-fake";
+				if (e.target.id === id || (e.target.lastChild !== null && e.target.lastChild.id === id)) 
+					settings.dex.useDefaultTier = "fakeOnly";
+				var id = "radio-tier-none";
+				if (e.target.id === id || (e.target.lastChild !== null && e.target.lastChild.id === id)) 
+					settings.dex.useDefaultTier = "none";
 			}
 			// Back and Submit buttons
-			if (e.target.id === "home-button") loadMainMenu();
-			if (e.target.id === "input-settings-button") loadInputPkmn();
+			if (e.target.id === "home-button") {
+				saveInputSettings(currentPage);
+				loadMainMenu();
+			}
+			if (e.target.id === "input-settings-button") {
+				saveInputSettings(currentPage);
+				loadInputPkmn();
+			}
 			if (e.target.id === "submit-single-pkmn-button") {
 				saveInputData(currentPage);
 				loadInputPkmn();

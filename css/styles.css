@@ -101,11 +101,21 @@ div.main-menu-button > h2 {
 .input-selection-row:hover {
 	background-color: grey;
 }
+label.settings-input {
+	height: 1.5em;
+	margin-left: 33px;
+	font-size: 20px;
+	color:white;
+}
+
 label.radio > .input-selection-row {
 	width: 275px;
 	margin: 5px 5px;
 }
-
+input[type="text"] {
+	border: solid black 1px;
+	height: 1.5em;
+}
 input[type="checkbox"] {
 	height: 1.5em;
 	width: 1.5em;

@@ -3,7 +3,33 @@
 	{{content}}
 </div>
 <div class="input-section">
-	<h2>Choose Input Style:</h2>
+	<h2>Default Tiers:</h2>
+	<label class="settings-input" for="default-tier-input"> Singles Tier: 
+		<input type="text" id="default-tier-input" value="{{tier}}"></input>
+	</label><br><br>
+	<label class="settings-input" for="default-doubles-tier-input"> Doubles Tier: 
+		<input type="text" id="default-doubles-tier-input" value="{{doublesTier}}"></input>
+	</label><br><br>
+	<div class="radio-section">
+		<label class="radio" for="radio-tier-all">
+			<div class="input-selection-row"> All Pokemon
+				<input type="radio" name="default-tier" id="radio-tier-all" {{all}}></input></br>
+			</div>
+		</label>
+		<label class="radio" for="radio-tier-fake">
+			<div class="input-selection-row"> Only Fakemons
+				<input type="radio" name="default-tier" id="radio-tier-fake" {{fake}}></input></br>
+			</div>
+		</label>
+		<label class="radio" for="radio-tier-none">
+			<div class="input-selection-row"> No Default Tier
+				<input type="radio" name="default-tier" id="radio-tier-none" {{none}}></input></br>
+			</div>
+		</label>
+	</div>
+</div>
+<div class="input-section">
+	<h2>Input Style:</h2>
 	<div class="radio-section">
 		<label class="radio" for="radio-column-dex">
 			<div class="input-selection-row"> Column Input

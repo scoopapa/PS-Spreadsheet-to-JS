@@ -1,7 +1,7 @@
 var settings = {};
 settings.dex = {
 	columnInput: true,
-	useDefaultTier: "fakeOnly", // possible values are "fakeOnly", "all", and "none"
+	useDefaultTier: "all", // possible values are "fakeOnly", "all", and "none"
 	defaultTier: "OU",
 	defaultDoublesTier: "DOU",
 	dexIndent: 1,
