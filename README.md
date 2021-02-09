@@ -12,8 +12,6 @@ Improve UI/CSS
 
 Implement editing lines in single input mode
 
-Save settings in cookies
-
 Implement Other Formes and possibly Cosmetic Formes
 
 Implement gender
