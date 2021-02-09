@@ -75,7 +75,8 @@ document.addEventListener("DOMContentLoaded",
 							for (var id of pData.ids) {
 								if (!id) continue;
 								item = r;
-								item = insertProperty(item, "name", pData.name[id]);
+								item = insertProperty(item, "name", pData.name[id].replace('"', '').replace('"', ''));
+								item = insertProperty(item, "tooltip", window.get1DexJS(id, pData));
 								buf += item;
 							}
 							changePage( insertProperty( rStr, "pokemon", buf ));

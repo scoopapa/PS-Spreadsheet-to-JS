@@ -29,7 +29,7 @@
 	var parseDexFunctions = { // list of functions to get stringified values for each pokedex.js property
 		getIDs: function() { // gets a list of pokemon ids for the exported code
 			var ids = data.inputData.name.split('\n');
-			if (ids[0] !== undefined) {
+			if (ids[0]) {
 				for (var i in ids) {
 					ids[i] = toID(ids[i]);
 					if (!ids[i]) delete ids[i];
@@ -51,7 +51,7 @@
 		},
 		// parsing functions
 		name: function(name) {
-			return name.trim();
+			return '"' + name.trim() + '"';
 		},
 		types: function(types) {
 			var typeArr = arrFromStr(types);
@@ -113,7 +113,7 @@
 		},
 		prevo: function(prevo) {
 			rPrevo = arrFromStr(prevo);
-			return rPrevo[0].trim();
+			return '"' + rPrevo[0].trim() + '"';
 		},
 		gender: function(toReturn) {
 			
@@ -196,7 +196,10 @@
 				if(!id) continue;
 				pData.num[id] = i;
 				i++;
-				if (!pData.name[id]) continue;
+				if (!pData.name[id]) {
+					pData.name[id] = id;
+					continue;
+				}
 				if (data.dexInfo && id in data.dexInfo) continue;
 				var formeData = getFormes( pData.name[id] );
 				if (formeData.baseSpecies !== pData.name[id]) {
@@ -265,82 +268,88 @@
 		evos: "evos",
 		eggGroups: "eggGroups",
 	};
-	var getOutputProps = function() {
-		return [
-			'num', 'name', 'baseSpecies', 'forme', 'types', 'gender', 
-			'stats', 'abilities', 'height', 'weight', 'color', 'prevo', 
-			'evos', 'eggGroups'
-		];
-	};
+	var outputProps =  [
+		'num', 'name', 'baseSpecies', 'forme', 'types', 'gender', 
+		'stats', 'abilities', 'height', 'weight', 'color', 'prevo', 
+		'evos', 'eggGroups'
+	];
 	var newLine = function(str, indent) {
 		var buf = "";
 		for (var i = 1; i <= indent; i++) buf += '\t';
 		return buf + str + '\n';
 	};
-	global.getPokedexJS = function(pData){
+	// pokedex.ts
+	global.get1DexJS = function(id, pData){
 		var indent = settings.dex.dexIndent;
-		if (!pData) pData = global.parseDexInputs();
-		var toOutput = getOutputProps();
+		var buf = "";
+		if (!id) return buf;
+		// id and open bracket
+		buf += newLine(`${id}: {`, indent);
+		// inherit
+		if (id in data.dexInfo) buf += newLine(`inherit: true,`, indent + 1);
+		for (var key of outputProps) {
+			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
+				buf += newLine(`${outputStr[key]}: ${pData[key][id]},`, indent + 1);
+			}
+		}
+		buf += newLine(`},`, indent);
+		console.log(buf);
+		return buf
+	}
+	global.getPokedexJS = function( pData = global.parseDexInputs(), pkmnid ){
 		var buf = "";
 		for (var id of pData.ids) {
-			if (!id) continue;
-			// id and open bracket
-			buf += newLine(`${id}: {`, indent);
-			// inherit
-			if (id in data.dexInfo) buf += newLine(`inherit: true,`, indent + 1);
-			for (var key of toOutput) {
-				if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
-					buf += newLine(`${outputStr[key]}: "${pData[key][id]}",`, indent + 1);
-				}
-			}
-			buf += newLine(`},`, indent);
+			buf += get1DexJS(id, pData);
 		}
 		return buf;
 	}
-	global.getLearnsetsJS = function(pData) {
+	// learnsets.ts
+	var getLSObj = function(id, pData) {
 		var indent = settings.dex.learnsetsIndent;
-		if (!pData) pData = global.parseDexInputs();
+		var buf = "";
+		if (!id) return buf;
+		var hasAdd = false;
+		var hasRem = false;
+		var key = "moveAdditions";
+		if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) hasAdd = true;
+		key = "moveRemovals";
+		if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) hasRem = true;
+		if (!hasAdd && !hasRem) return "";
+		
+		// id and open bracket
+		buf += newLine(`${id}: {`, indent);
+		buf += newLine("learnset: {", indent + 1)
+		// inherit
+		if (id in data.dexInfo) buf += newLine(`inherit: true,`, indent + 2);
+		var key = "moveAdditions";
+		if (hasAdd) {
+			for (var moveid of pData[key][id]) {
+				buf += newLine(`${moveid}: ["8L1"],`, indent + 2);
+			}
+		}
+		key = "moveRemovals";
+		if (hasRem) {
+			for (var moveid of pData[key][id]) {
+				buf += newLine(`${moveid}: null,`, indent + 2);
+			}
+		}
+		buf += newLine(`},`, indent + 1);
+		buf += newLine(`},`, indent);
+		return buf;
+	}
+	global.getLearnsetsJS = function( pData = global.parseDexInputs(), pkmnid ) {
 		var buf = "";
 		for (var id of pData.ids) {
-			if (!id) continue;
-			var hasAdd = false;
-			var hasRem = false;
-			var key = "moveAdditions";
-			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) hasAdd = true;
-			key = "moveRemovals";
-			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) hasRem = true;
-			if (!hasAdd && !hasRem) continue;
-			
-			// id and open bracket
-			buf += newLine(`${id}: {`, indent);
-			buf += newLine("learnset: {", indent + 1)
-			// inherit
-			if (id in data.dexInfo) buf += newLine(`inherit: true,`, indent + 2);
-			var key = "moveAdditions";
-			if (hasAdd) {
-				for (var moveid of pData[key][id]) {
-					buf += newLine(`${moveid}: ["8L1"],`, indent + 2);
-				}
-			}
-			key = "moveRemovals";
-			if (hasRem) {
-				for (var moveid of pData[key][id]) {
-					buf += newLine(`${moveid}: null,`, indent + 2);
-				}
-			}
-			buf += newLine(`},`, indent + 1);
-			buf += newLine(`},`, indent);
+			if (!pkmnid || pkmnid === id) buf += getLSObj(id, pData);
 		}
 		return buf;
 	}
-	global.getScriptsJS = function(pData) {
+	global.getScriptsJS = function( pData = global.parseDexInputs() ) {
 		var indent = settings.dex.scriptsIndent;
-		if (!pData) pData = global.parseDexInputs();
 		var buf = "";
 		for (var id of pData.ids) {
 			if (!id) continue;
 			if (id in data.dexInfo === false) continue;
-
 			var hasAdd = false;
 			var hasRem = false;
 			var key = "moveAdditions";
@@ -364,9 +373,8 @@
 		}
 		return buf;
 	}
-	global.getFormatsDataJS = function(pData) {
+	global.getFormatsDataJS = function( pData = global.parseDexInputs() ) {
 		var indent = settings.dex.formatsIndent;
-		if (!pData) pData = global.parseDexInputs();
 		var buf = "";
 		for (var id of pData.ids) {
 			if (!id) continue;
