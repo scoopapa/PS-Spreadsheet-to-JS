@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded",
 					rStr = insertProperty(rStr, "none", settings.dex.useDefaultTier === "none" ? "checked" : "");
 					rStr = insertProperty(rStr, "tier", settings.dex.defaultTier);
 					rStr = insertProperty(rStr, "doublesTier", settings.dex.defaultDoublesTier);
+					rStr = insertProperty(rStr, "dexNum", settings.dex.initDexNum);
 					for (var key in data.inputTypes) {
 						item = r;
 						item = insertProperty(item, "id", key);
@@ -167,6 +168,7 @@ document.addEventListener("DOMContentLoaded",
 			for (var field of fields) {
 				if (field.id === "default-tier-input") settings.dex.defaultTier = field.value;
 				if (field.id === "default-doubles-tier-input") settings.dex.defaultDoublesTier = field.value;
+				if (field.id === "dex-num-input") settings.dex.initDexNum = field.value;
 			}
 			document.cookie = JSON.stringify( settings );
 		}

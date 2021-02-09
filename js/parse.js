@@ -24,7 +24,6 @@
 		str = str.toLowerCase().replace(/\s/g, '').replace(/-/g, '');
 		if (str) for( var c of removeChars) str = str.replace(new RegExp(c, "g"), '');
 		if (str) for( var c of sepChars) str = str.replace(new RegExp(c, "g"), '');
-		console.log(str);
 		return str;
 	};
 	var parseDexFunctions = { // list of functions to get stringified values for each pokedex.js property
@@ -33,7 +32,6 @@
 			if (ids[0] !== undefined) {
 				for (var i in ids) {
 					ids[i] = toID(ids[i]);
-					console.log(ids[i]);
 					if (!ids[i]) delete ids[i];
 				}
 			} else { // if name list is not given, create dummy ids based on the first property that has data
@@ -49,7 +47,6 @@
 					}
 				}
 			}
-			console.log(ids);
 			return ids;
 		},
 		// parsing functions
@@ -194,7 +191,11 @@
 			return toReturn;
 		}
 		var doDexProcess = function() {
+			var i = settings.dex.initDexNum;
 			for (var id of pData.ids) {
+				if(!id) continue;
+				pData.num[id] = i;
+				i++;
 				if (!pData.name[id]) continue;
 				if (data.dexInfo && id in data.dexInfo) continue;
 				var formeData = getFormes( pData.name[id] );
@@ -203,6 +204,7 @@
 					extraData.forme[id] = formeData.forme;
 				}
 			}
+			console.log(pData.num);
 			pData.baseSpecies = extraData.baseSpecies;
 			pData.forme = extraData.forme;
 			
@@ -234,17 +236,16 @@
 	};
 	global.parseDexInputs = function() {
 		var parsedData = {};
+		parsedData.num = {};
 		for (var iType in data.inputTypes) {
 			parsedData[iType] = {};
 		}
 		var ids = parseDexFunctions.getIDs();
 		parsedData.ids = ids;
-		console.log(ids);
 		for (var key in settings.dex.dataInputTypes) {
 			if (settings.dex.dataInputTypes[key]) parsedData[key] = parseDexColumn(key, ids);
 		}
 		parsedData = processData(parsedData);
-		console.log(ids);
 		return parsedData;
 	};
 

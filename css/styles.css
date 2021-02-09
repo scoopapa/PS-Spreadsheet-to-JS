@@ -124,7 +124,7 @@ label.radio > .input-selection-row {
 	width: 290px;
 	margin: 5px 5px;
 }
-input[type="text"] {
+input[type="text"], input[type="number"] {
 	position: relative;
 	border: solid black 1px;
 	height: 1.5em;
@@ -132,7 +132,8 @@ input[type="text"] {
 	right: 170px;
 	/* width: 250px; */
 }
-label.settings-input > input[type="text"] {
+label.settings-input > input[type="text"], 
+label.settings-input > input[type="number"] {
 	right: 20px;
 }
 
