@@ -8,6 +8,8 @@ Create options for handling learnset inheritance for movepool removals
 
 Debug single input mode
 
+Improve UI/CSS
+
 Implement editing lines in single input mode
 
 Save settings in cookies
