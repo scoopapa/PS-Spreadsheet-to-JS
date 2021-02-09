@@ -292,20 +292,28 @@
 		if (!pData) pData = global.parseDexInputs();
 		var buf = "";
 		for (var id of pData.ids) {
-			// id and open bracket
 			if (!id) continue;
+			var hasAdd = false;
+			var hasRem = false;
+			var key = "moveAdditions";
+			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) hasAdd = true;
+			key = "moveRemovals";
+			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) hasRem = true;
+			if (!hasAdd && !hasRem) continue;
+			
+			// id and open bracket
 			buf += newLine(`${id}: {`, indent);
 			buf += newLine("learnset: {", indent + 1)
 			// inherit
 			if (id in data.dexInfo) buf += newLine(`inherit: true,`, indent + 2);
 			var key = "moveAdditions";
-			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
+			if (hasAdd) {
 				for (var moveid of pData[key][id]) {
 					buf += newLine(`${moveid}: ["8L1"],`, indent + 2);
 				}
 			}
 			key = "moveRemovals";
-			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
+			if (hasRem) {
 				for (var moveid of pData[key][id]) {
 					buf += newLine(`${moveid}: null,`, indent + 2);
 				}
@@ -322,16 +330,23 @@
 		for (var id of pData.ids) {
 			if (!id) continue;
 			if (id in data.dexInfo === false) continue;
-			var name = pData.name[id] ? pData.name[id] : id;
-			buf += newLine(`// ${name}`, indent);
+
+			var hasAdd = false;
+			var hasRem = false;
 			var key = "moveAdditions";
-			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
+			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) hasAdd = true;
+			key = "moveRemovals";
+			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) hasRem = true;
+			if (!hasAdd && !hasRem) continue;
+			
+			var name = pData.name[id] ? pData.name[id] : id;
+			buf += newLine(`// ${name}`, indent);			
+			if (hasAdd) {
 				for (var moveid of pData[key][id]) {
 					buf += newLine(`this.modData("Learnsets", "${id}").learnset.${moveid} = ["8L1"];`, indent);
 				}
 			}
-			key = "moveRemovals";
-			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
+			if (hasRem) {
 				for (var moveid of pData[key][id]) {
 					buf += newLine(`delete this.modData('Learnsets', '${id}').learnset.${moveid};`, indent);
 				}
@@ -353,16 +368,15 @@
 			) continue;
 			// id and open bracket
 			buf += newLine(`${id}: {`, indent);
+			
 			var key = "tier";
 			var val = pData[key][id] || settings.dex.defaultTier;
-			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
-				buf += newLine(`${key}: ${val},`, indent + 1);
-			}
+			buf += newLine(`${key}: ${val},`, indent + 1);
+			
 			key = "doublesTier";
 			val = pData[key][id] || settings.dex.defaultDoublesTier;
-			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
-				buf += newLine(`${key}: ${val},`, indent + 1);
-			}
+			buf += newLine(`${key}: ${val},`, indent + 1);
+			
 			buf += newLine(`},`, indent);
 		}
 		return buf;
