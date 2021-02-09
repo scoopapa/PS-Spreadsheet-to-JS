@@ -170,6 +170,7 @@ document.addEventListener("DOMContentLoaded",
 		// Header Bar Buttons
 		document.getElementById("home-link").addEventListener( "click", function(e){
 			loadMainMenu();
+			saveInputSettings(currentPage);
 		})
 		// Content Buttons
 		document.getElementById("current-page").addEventListener( "click", function(e){
@@ -212,6 +213,7 @@ document.addEventListener("DOMContentLoaded",
 			}
 			if (e.target.id === "default-settings-button") {
 				loadDefaultSettings();
+				document.cookie = JSON.stringify( settings );
 				loadInputSelectPkmn();
 			}
 			if (e.target.id === "input-settings-button") {
