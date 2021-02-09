@@ -8,6 +8,7 @@ var loadDefaultSettings = function() {
 		dexIndent: 1,
 		learnsetsIndent: 1,
 		scriptsIndent: 1,
+		formatsIndent: 1,
 	};
 	settings.dex.dataInputTypes = {};
 	for (var iType in data.inputTypes) {

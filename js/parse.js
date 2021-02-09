@@ -365,7 +365,7 @@
 		return buf;
 	}
 	global.getFormatsDataJS = function(pData) {
-		var indent = settings.dex.scriptsIndent;
+		var indent = settings.dex.formatsIndent;
 		if (!pData) pData = global.parseDexInputs();
 		var buf = "";
 		for (var id of pData.ids) {
