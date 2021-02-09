@@ -130,6 +130,9 @@
 		tier: function(tier) {
 			return tier.trim();
 		},
+		doublesTier: function(tier) {
+			return tier.trim();
+		},
 	};
 	var parseDexColumn = function(key, ids) {
 		var arr = data.inputData[key].split('\n'); // separate each input into an array by newline char, then parse each element individually
