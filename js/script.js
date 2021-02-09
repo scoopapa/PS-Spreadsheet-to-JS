@@ -165,6 +165,7 @@ document.addEventListener("DOMContentLoaded",
 				if (field.id === "default-tier-input") settings.dex.defaultTier = field.value;
 				if (field.id === "default-doubles-tier-input") settings.dex.defaultDoublesTier = field.value;
 			}
+			document.cookie = JSON.stringify( settings );
 		}
 		// Header Bar Buttons
 		document.getElementById("home-link").addEventListener( "click", function(e){
@@ -209,6 +210,10 @@ document.addEventListener("DOMContentLoaded",
 				saveInputSettings(currentPage);
 				loadMainMenu();
 			}
+			if (e.target.id === "default-settings-button") {
+				loadDefaultSettings();
+				loadInputSelectPkmn();
+			}
 			if (e.target.id === "input-settings-button") {
 				saveInputSettings(currentPage);
 				loadInputPkmn();
@@ -235,5 +240,6 @@ document.addEventListener("DOMContentLoaded",
 		
 		// Init
 		loadMainMenu();
+		if (document.cookie) settings = JSON.parse( document.cookie );
 	}
 );

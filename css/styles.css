@@ -75,9 +75,10 @@ div.main-menu-button > h2 {
 /*data input*/
 .input-section {
 	position: relative;
+	display: block;
 	background-color: #5b615a;
 	width: 350px;
-	margin: 5%;
+	margin: 20px 5%;
 	text-shadow: 2px 2px 2px black;
 	border: solid black 2px;
 	padding-bottom: 20px;

@@ -20,10 +20,8 @@ data.inputTypes = { // data.inputTypes, data.inputData, settings.dataInputTypes,
 };
 data.inputData = {};
 for (var iType in data.inputTypes) {
-	console.log(iType);
 	data.inputData[iType] = "";
 }
-console.log(data.inputData);
 data.regions = {
 	kanto: {
 		iden: ["kanto", "kantonese", "kantan", "kantonian", "kantoan", "kantonan", "kantish"],
