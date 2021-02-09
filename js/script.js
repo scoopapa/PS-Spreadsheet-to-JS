@@ -98,62 +98,49 @@ document.addEventListener("DOMContentLoaded",
 				else if (settings.dex.dataInputTypes[key] && key !== "name") isDexData = true;
 			}
 			if (!isDexData && !isLearnData) isDexData = true;
-			var doOutput = function() {
-				ajaxUtils.sendGetRequest( "html/pkmn-output.html", function(rStr){
-					var pData = window.parseDexInputs(pData);
-					var dexStr = isDexData ? window.getPokedexJS(pData) : "";
-					var learnsetStr = isLearnData ? window.getLearnsetsJS(pData) : "";
-					var scriptsStr = isLearnData ? window.getScriptsJS(pData) : "";
-					var formatsDataStr = isDexData ? window.getFormatsDataJS(pData) : "";
-					
-					ajaxUtils.sendGetRequest( "html/pkmn-output-item.html", function(r){
-						var buf = ""
-						if (isDexData) {
-							buf += insertProperty( r, "id", "pokedex-js" );
-							buf = insertProperty( buf, "title", "pokedex.ts");
-							buf = insertProperty( buf, "jsData", dexStr );
-						}
-						if (learnsetStr !== "") {
-							buf += insertProperty( r, "id", "learnsets-js" );
-							buf = insertProperty( buf, "title", "learnsets.ts");
-							buf = insertProperty( buf, "jsData", learnsetStr );
-						}
-						if (scriptsStr !== "") {
-							buf += insertProperty( r, "id", "scripts-js" );
-							buf = insertProperty( buf, "title", "scripts.ts");
-							buf = insertProperty( buf, "jsData", scriptsStr );
-						}
-						if (formatsDataStr !== "") {
-							buf += insertProperty( r, "id", "formats-data-js" );
-							buf = insertProperty( buf, "title", "formats-data.ts" );
-							buf = insertProperty( buf, "jsData", formatsDataStr );
-						}
-						rStr = insertProperty( rStr, "content", buf )
-						changePage(rStr);
-					}, false );
+			ajaxUtils.sendGetRequest( "html/pkmn-output.html", function(rStr){
+				var pData = window.parseDexInputs(pData);
+				var dexStr = isDexData ? window.getPokedexJS(pData) : "";
+				var learnsetStr = isLearnData ? window.getLearnsetsJS(pData) : "";
+				var scriptsStr = isLearnData ? window.getScriptsJS(pData) : "";
+				var formatsDataStr = isDexData ? window.getFormatsDataJS(pData) : "";
+				
+				ajaxUtils.sendGetRequest( "html/pkmn-output-item.html", function(r){
+					var buf = ""
+					if (isDexData) {
+						buf += insertProperty( r, "id", "pokedex-js" );
+						buf = insertProperty( buf, "title", "pokedex.ts");
+						buf = insertProperty( buf, "jsData", dexStr );
+					}
+					if (learnsetStr !== "") {
+						buf += insertProperty( r, "id", "learnsets-js" );
+						buf = insertProperty( buf, "title", "learnsets.ts");
+						buf = insertProperty( buf, "jsData", learnsetStr );
+					}
+					if (scriptsStr !== "") {
+						buf += insertProperty( r, "id", "scripts-js" );
+						buf = insertProperty( buf, "title", "scripts.ts");
+						buf = insertProperty( buf, "jsData", scriptsStr );
+					}
+					if (formatsDataStr !== "") {
+						buf += insertProperty( r, "id", "formats-data-js" );
+						buf = insertProperty( buf, "title", "formats-data.ts" );
+						buf = insertProperty( buf, "jsData", formatsDataStr );
+					}
+					rStr = insertProperty( rStr, "content", buf )
+					changePage(rStr);
 				}, false );
-			}
-			if (!data.dexInfo) {
-				ajaxUtils.sendGetRequest( "js/data/pokedex.js", function(r){
-					data.dexInfo = r;
-					doOutput();
-				}, true ); 
-			} else {
-				doOutput();
-			}
+			}, false );
 		};
 		// Button Code
 		var saveInputData = function(page = "", row = -1) {
 			var tagN = page === "data-column-input-main" ? "textarea" : "input"; // handles column and single input
-			console.log(page);
-			console.log(tagN);
 			if (page) {
 				var fields = document.getElementsByTagName(tagN);
 				for (var field of fields) {
 					if (typeof(data.inputData[field.id]) !== "string") return;
 					if (page === "data-single-input-main") {
 						if (field.value) {
-							console.log( field.value );
 							if (row === -1) data.inputData[field.id] += '\n' + field.value;
 						}
 					} else {

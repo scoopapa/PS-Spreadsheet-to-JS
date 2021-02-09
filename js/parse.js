@@ -204,7 +204,6 @@
 					extraData.forme[id] = formeData.forme;
 				}
 			}
-			console.log(pData.num);
 			pData.baseSpecies = extraData.baseSpecies;
 			pData.forme = extraData.forme;
 			

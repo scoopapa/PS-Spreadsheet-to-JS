@@ -56,3 +56,7 @@ data.regions = {
 		name: "Galar",
 	},
 };
+
+ajaxUtils.sendGetRequest( "js/data/pokedex.js", function(r){
+	data.dexInfo = r;
+}, true ); 
