@@ -95,7 +95,7 @@ div.main-menu-button > h2 {
 	.row-main{ width: 33%; }}
 	
 /*data input*/
-.input-section, .input-section-wide {
+.input-section, .input-section-wide, .input-section-narrow {
 	position: relative;
 	display: block;
 	background-color: #5b615a;
@@ -105,6 +105,10 @@ div.main-menu-button > h2 {
 	border: solid black 2px;
 	padding: 0px 0px 20px 20px;
 	float: left;
+}
+.input-section-narrow {
+	width: 250px;
+	margin: 20px 5%;
 }
 .input-section-wide {
 	width: 550px;
@@ -223,6 +227,14 @@ div.buttons > button {
 	font-size: 20px;
 	margin-left: 10px;
 }
+.single-pkmn {
+	width: 90%;
+}
+.single-pkmn:hover {
+	background-color: grey;
+	color: white;
+}
+
 /* output */
 textarea.output {
 	height: 25vh;

@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded",
 						item = r;
 						item = insertProperty(item, "id", key);
 						item = insertProperty(item, "type", data.inputTypes[key]);
-						item = insertProperty(item, "text", data.inputData[key]);
+						item = insertProperty(item, "text", '\n' + data.inputData[key]);
 						buf += item;
 					}
 					rStr = insertProperty(rStr, "content", buf);
@@ -143,16 +143,17 @@ document.addEventListener("DOMContentLoaded",
 			var tagN = page === "data-column-input-main" ? "textarea" : "input";
 			if (page) {
 				var fields = document.getElementsByTagName(tagN);
+				var e1 = data.inputData["name"]
 				for (var field of fields) {
-					if (typeof(data.inputData[field.id]) !== "string") continue;
 					if (page === "data-single-input-main") {
-						if (field.value) {
-							if (editingRow === -1) {
-								if (data.inputData[field.id]) data.inputData[field.id] += '\n';
+						if (editingRow === -1) {
+							if (e1) {
+								data.inputData[field.id] += '\n';
 								data.inputData[field.id] += field.value;
 							}
-							else data.replaceInput( editingRow, field.id, field.value);
+							else data.inputData[field.id] = field.value;
 						}
+						else data.replaceInput( editingRow, field.id, field.value);
 					} else {
 						data.inputData[field.id] = field.value;
 					}
