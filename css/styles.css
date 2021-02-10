@@ -37,6 +37,28 @@ h1 > span {
 	text-align: left;
 	margin-left: 40px;
 }
+@media (max-width: 576px) {
+	h1 > span { 
+		margin-left: 10px;
+		font-size: 6vw;
+	}
+	h1 > img {
+		top: 0px;
+		margin-left: 10px;
+		height: 75px;
+		width: 75px;
+	}
+}
+@media (max-width: 836px) {
+	h1 > span { 
+		top: 20px;
+	}
+}
+@media (max-width: 880px) {
+	h1 > span { 
+		margin-left: 20px;
+	}
+}
 
 /*main menu*/
 div.main-menu-button > h2 {
@@ -85,7 +107,7 @@ div.main-menu-button > h2 {
 	float: left;
 }
 .input-section-wide {
-	width: 420px;
+	width: 550px;
 }
 
 .input-section > h2, .input-section > h3 {
@@ -136,6 +158,10 @@ label.settings-input > input[type="text"],
 label.settings-input > input[type="number"] {
 	right: 20px;
 }
+.input-field-wide > input[type="text"] {
+	width: 400px;
+	right: 40px;
+}
 
 input[type="checkbox"] {
 	height: 1.5em;
@@ -180,7 +206,11 @@ textarea.input {
 	.row{ width: 33%; }}
 @media (min-width: 1200px) {
 	.row{ width: 25%; }}
-	
+
+button {
+	margin-bottom: 20px;
+}
+
 div.buttons {
 	display: block;
 	clear: both;

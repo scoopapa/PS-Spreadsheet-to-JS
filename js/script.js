@@ -1,4 +1,6 @@
 var currentPage = "";
+var editingRow = -1;
+var editingName = "";
 document.addEventListener("DOMContentLoaded",
 	function (event) {
 		// Helper Functions
@@ -21,12 +23,12 @@ document.addEventListener("DOMContentLoaded",
 			return str;
 		};
 		// Page Load Functions
-		var loadMainMenu = function () {
+		var loadMainMenu = function () { // Main Menu
 			showLoading("#current-page");
 			currentPage = "main-menu"
 			ajaxUtils.sendGetRequest( "html/main-menu.html", changePage, false );
 		};
-		var loadInputSelectPkmn = function() {
+		var loadInputSelectPkmn = function() { // Input Settings
 			showLoading("#current-page");
 			currentPage = "data-input-select-pkmn";
 			ajaxUtils.sendGetRequest( "html/data-input-select-pkmn.html", function(rStr){
@@ -51,7 +53,7 @@ document.addEventListener("DOMContentLoaded",
 				}, false  );
 			}, false  );
 		};
-		var loadInputPkmn = function() {
+		var loadInputPkmn = function() { // Column and Single Data Input
 			var iStyle = settings.dex.columnInput ? "column" : "single";
 			showLoading("#current-page");
 			currentPage = "data-" + iStyle + "-input-main";
@@ -75,6 +77,8 @@ document.addEventListener("DOMContentLoaded",
 							for (var id of pData.ids) {
 								if (!id) continue;
 								item = r;
+								item = insertProperty(item, "row", JSON.stringify(data.getInputRow(pData.inputRow[id])));
+								item = insertProperty(item, "rowNum", pData.inputRow[id]);
 								item = insertProperty(item, "name", pData.name[id].replace('"', '').replace('"', ''));
 								item = insertProperty(item, "tooltip", window.get1DexJS(id, pData));
 								buf += item;
@@ -87,7 +91,7 @@ document.addEventListener("DOMContentLoaded",
 				}, false );
 			}, false );
 		};
-		var loadOutputPkmn = function() {
+		var loadOutputPkmn = function() { // View Code Output
 			showLoading("#current-page");
 			currentPage = "pkmn-output";
 
@@ -134,21 +138,27 @@ document.addEventListener("DOMContentLoaded",
 			}, false );
 		};
 		// Button Code
-		var saveInputData = function(page = "", row = -1) {
-			var tagN = page === "data-column-input-main" ? "textarea" : "input"; // handles column and single input
+		// Save Functions
+		var saveInputData = function(page = "") {
+			var tagN = page === "data-column-input-main" ? "textarea" : "input";
 			if (page) {
 				var fields = document.getElementsByTagName(tagN);
 				for (var field of fields) {
-					if (typeof(data.inputData[field.id]) !== "string") return;
+					if (typeof(data.inputData[field.id]) !== "string") continue;
 					if (page === "data-single-input-main") {
 						if (field.value) {
-							if (row === -1) data.inputData[field.id] += '\n' + field.value;
+							if (editingRow === -1) {
+								if (data.inputData[field.id]) data.inputData[field.id] += '\n';
+								data.inputData[field.id] += field.value;
+							}
+							else data.replaceInput( editingRow, field.id, field.value);
 						}
 					} else {
 						data.inputData[field.id] = field.value;
 					}
 				}
 			}
+			editingRow = -1;
 		};
 		var saveInputSettings = function(page = "") {
 			if (page !== "data-input-select-pkmn") return;
@@ -199,34 +209,68 @@ document.addEventListener("DOMContentLoaded",
 				if (e.target.id === id || (e.target.lastChild !== null && e.target.lastChild.id === id)) 
 					settings.dex.useDefaultTier = "none";
 			}
+			// single input editing
+			if (currentPage === "data-single-input-main") {
+				if (e.target.dataset.inputrow) {
+					var row = JSON.parse(e.target.dataset.inputrow);
+					if (editingRow === -1) {
+						document.getElementById("single-input-section").innerHTML +=
+						`<div class="buttons">
+							<button type="button" id="edit-single-pkmn-button">Save Pokemon</button>
+							<button type="button" id="discard-single-pkmn">Discard Changes</button>
+							<button type="button" id="delete-single-pkmn">Delete</button>
+						</div>`;
+					}
+					editingRow = e.target.dataset.rownum;
+					editingName = e.target.innerHTML.trim();
+					e.target.style.fontStyle = "italic";
+					e.target.style.color = "white";
+					document.getElementById("single-input-title").style.fontStyle = "italic";
+					document.getElementById("single-input-title").style.color = "white";
+					document.getElementById("single-input-title").innerHTML = "Editing " + e.target.innerHTML;
+					document.getElementById("submit-single-pkmn-button").innerHTML = "Update Pokemon";
+					for (var iType in row) {
+						if (!document.getElementById(iType)) continue;
+						document.getElementById(iType).value = row[iType];
+					}
+					var pkmnList = document.getElementsByClassName("single-pkmn");
+					for(var pkmn of pkmnList) {
+						if (pkmn.dataset.rownum !== e.target.dataset.rownum) pkmn.style = null;
+					}
+					return;
+				}
+			}
 			// Back and Submit buttons
 			if (e.target.id === "home-button") {
 				saveInputSettings(currentPage);
 				loadMainMenu();
-			}
-			if (e.target.id === "default-settings-button") {
+			} else if (e.target.id === "default-settings-button") {
 				loadDefaultSettings();
 				document.cookie = JSON.stringify( settings );
 				loadInputSelectPkmn();
-			}
-			if (e.target.id === "input-settings-button") {
+			} else if (e.target.id === "input-settings-button") {
 				saveInputSettings(currentPage);
 				loadInputPkmn();
-			}
-			if (e.target.id === "submit-single-pkmn-button") {
-				saveInputData(currentPage);
+			} else if (e.target.id === "submit-single-pkmn-button" || e.target.id === "edit-single-pkmn-button") {
+				saveInputData(currentPage, editingRow);
 				loadInputPkmn();
-			}
-			if (e.target.id === "submit-pkmn-final-button") {
+			} else if (e.target.id === "discard-single-pkmn") {
+				editingRow = -1;
+				loadInputPkmn();
+			} else if (e.target.id === "delete-single-pkmn") {
+				if (window.confirm( "Delete data for " + editingName + "?")) {
+					data.deleteInputRow(editingRow);
+					editingRow = -1;
+					loadInputPkmn();
+				}
+			} else if (e.target.id === "submit-pkmn-final-button") {
 				saveInputData(currentPage);
 				loadOutputPkmn();
-			}
-			if (e.target.id === "input-style-column") {
+			} else if (e.target.id === "input-style-column") {
 				settings.dex.columnInput = true;
 				saveInputData(currentPage);
 				loadInputPkmn();
-			}
-			if (e.target.id === "input-style-single") {
+			} else if (e.target.id === "input-style-single") {
 				settings.dex.columnInput = false;
 				saveInputData(currentPage);
 				loadInputPkmn();

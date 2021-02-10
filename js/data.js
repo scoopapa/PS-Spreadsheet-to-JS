@@ -2,7 +2,7 @@ var data = { // loaded dynamically
 	dexInfo: null,
 	learnsetsInfo: null,
 };
-data.inputTypes = { // data.inputTypes, data.inputData, settings.dataInputTypes, and parsedData inside of global.parseDexInputs should have the same keys
+data.inputTypes = {
 	name: "Name",
 	types: "Types",
 	abilities: "Abilities",
@@ -22,6 +22,25 @@ data.inputData = {};
 for (var iType in data.inputTypes) {
 	data.inputData[iType] = "";
 }
+// Single Input Editing Functions
+data.getInputRow = function(row) {
+	var returnObj = {};
+	for (var iType in data.inputTypes) {
+		returnObj[iType] =  data.inputData[iType].split("\n")[row];
+	}
+	return returnObj;
+}
+data.replaceInput = function(rowN, iType, newInput) {
+	var row = data.inputData[iType].split("\n")[rowN];
+	data.inputData[iType] = data.inputData[iType].replace(row, newInput);
+}
+data.deleteInputRow = function(rowN) {
+	for (var iType in data.inputTypes) {
+		var row = data.inputData[iType].split("\n")[rowN];
+		data.inputData[iType] = data.inputData[iType].replace(row + "\n", "");
+	}
+}
+
 data.regions = {
 	kanto: {
 		iden: ["kanto", "kantonese", "kantan", "kantonian", "kantoan", "kantonan", "kantish"],

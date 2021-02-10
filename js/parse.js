@@ -27,12 +27,14 @@
 		return str;
 	};
 	var parseDexFunctions = { // list of functions to get stringified values for each pokedex.js property
-		getIDs: function() { // gets a list of pokemon ids for the exported code
+		setIDs: function(pData) { // gets a list of pokemon ids for the exported code
 			var ids = data.inputData.name.split('\n');
+			var inputRow = pData.inputRow;
 			if (ids[0]) {
 				for (var i in ids) {
 					ids[i] = toID(ids[i]);
 					if (!ids[i]) delete ids[i];
+					else inputRow[ids[i]] = i;
 				}
 			} else { // if name list is not given, create dummy ids based on the first property that has data
 				for (var key in settings.dex.dataInputTypes) {
@@ -42,12 +44,13 @@
 							let j = Number(i) + 1;
 							ids[i] = "pkmn" + j;
 							if (!arr[i]) delete ids[i];
+							else inputRow[ids[i]] = i;
 						}
 						break;
 					}
 				}
 			}
-			return ids;
+			pData.ids = ids;
 		},
 		// parsing functions
 		name: function(name) {
@@ -239,11 +242,12 @@
 	global.parseDexInputs = function() {
 		var parsedData = {};
 		parsedData.num = {};
+		parsedData.inputRow = {};
 		for (var iType in data.inputTypes) {
 			parsedData[iType] = {};
 		}
-		var ids = parseDexFunctions.getIDs();
-		parsedData.ids = ids;
+		parseDexFunctions.setIDs(parsedData);
+		var ids = parsedData.ids
 		for (var key in settings.dex.dataInputTypes) {
 			if (settings.dex.dataInputTypes[key]) parsedData[key] = parseDexColumn(key, ids);
 		}
@@ -293,7 +297,6 @@
 			}
 		}
 		buf += newLine(`},`, indent);
-		console.log(buf);
 		return buf
 	}
 	global.getPokedexJS = function( pData = global.parseDexInputs(), pkmnid ){
