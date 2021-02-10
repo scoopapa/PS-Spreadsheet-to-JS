@@ -1,5 +1,5 @@
 (function(global) {
-	var sepChars = ['/',',','\t','/.','\\\\',':',';'];
+	var sepChars = ['/',',','\t','\\.','\\\\',':',';'];
 	var removeChars = ['\\*','&','$','@','!','#','\\(','\\)','\\{','\\}','\\[','\\]','~','`','~','"',"'","none","---","----","-----"];
 	var arrFromStr = function(str) { // Turns strings separated by chars in sepChars into arrays
 		for( var c of sepChars ) str = str.replace(new RegExp(c, "g"), '|');
