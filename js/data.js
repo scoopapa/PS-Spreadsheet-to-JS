@@ -38,6 +38,7 @@ data.deleteInputRow = function(rowN) {
 	for (var iType in data.inputTypes) {
 		var row = data.inputData[iType].split("\n")[rowN];
 		data.inputData[iType] = data.inputData[iType].replace(row + "\n", "");
+		data.inputData[iType] = data.inputData[iType].replace(row, "");
 	}
 }
 
