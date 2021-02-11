@@ -3,12 +3,10 @@ Tools for mass generating content code for Pokemon Showdown mods from spreadshee
 
 Todo:
 
-Create options for handling learnset inheritance for movepool removals
-
-Improve UI/CSS
-
-Implement editing lines in single input mode
+Handle movepool inheritance conflicts with movepool removals
 
 Implement Other Formes and possibly Cosmetic Formes
 
-Implement gender
+Improve UI/CSS
+
+Implement gender/color
