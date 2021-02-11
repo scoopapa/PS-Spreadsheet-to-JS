@@ -7,6 +7,8 @@ Handle movepool inheritance conflicts with movepool removals
 
 Implement Other Formes and possibly Cosmetic Formes
 
+Make different kinds of forme detection optional
+
 Improve UI/CSS
 
 Implement gender/color
