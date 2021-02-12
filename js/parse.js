@@ -90,8 +90,8 @@
 		},
 		// moveAdditions and moveRemovals return arrays instead of strings
 		moveAdditions: function(moveStr) {
-			moveStr = moveStr.replace(/\s?{0-9}[1-2]\s/g,"|");
-			moveStr = moveStr.replace(/tm{0-9}[1-2]|tm{0-9}[1-2]|le?ve?l{0-9}[1-2]/g, "|");
+			moveStr = moveStr.replace(/\s?[0-9]{1-2}\s/g,"|");
+			moveStr = moveStr.replace(/tm[0-9]{1-2}|tm[0-9]{1-2}|le?ve?l[0-9]{1-2}/g, "|");
 			var arr = arrFromStr(moveStr);
 			for (var i in arr) {
 				arr[i] = toID(arr[i]);
@@ -104,8 +104,8 @@
 			return arr;
 		},
 		moveRemovals: function(moveStr) {
-			moveStr = moveStr.replace(/\s?{0-9}[1-2]\s/g,"|");
-			moveStr = moveStr.replace(/tm{0-9}[1-2]|tm{0-9}[1-2]|le?ve?l{0-9}[1-2]/g, "|");
+			moveStr = moveStr.replace(/\s?[0-9]{1-2}\s/g,"|");
+			moveStr = moveStr.replace(/tm[0-9]{1-2}|tm[0-9]{1-2}|le?ve?l[0-9]{1-2}/g, "|");
 			var arr = arrFromStr(moveStr);
 			for (var i in arr) {
 				arr[i] = toID(arr[i]);
