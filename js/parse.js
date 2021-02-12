@@ -65,7 +65,7 @@
 		},
 		abilities: function(abilities) {
 			abilities = abilities.replace(/hidden ability/i, '');
-			abilities = abilities.replace(/(HA)/g, '');
+			abilities = abilities.replace(/\(HA\)|\(DW\)/g, '');
 			var abilArr = arrFromStr(abilities);
 			if (abilArr.length === 2) {// if there are only two abilities, the last one is the hidden ability
 				abilArr = [abilArr[0], "", abilArr[1]];
@@ -94,6 +94,7 @@
 			for (var i in arr) {
 				arr[i] = toID(arr[i]);
 				arr[i] = arr[i].replace(/\btm{0-9}[1-2]|\btm{0-9}[1-2]|\ble?ve?l{0-9}[1-2]/, "");
+				arr[i] = arr[i].replace(/\b{0-9}[1-2]\s/,"");
 			}
 			arr = arr.filter(function(el){
 				if (el) return true;
