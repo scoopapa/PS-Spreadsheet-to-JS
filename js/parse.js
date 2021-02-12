@@ -95,7 +95,7 @@
 				arr[i] = toID(arr[i]);
 				arr[i] = arr[i].replace(/\btm{0-9}[1-2]|\btm{0-9}[1-2]|\ble?ve?l{0-9}[1-2]/, "");
 			}
-			arr.filter(function(el){
+			arr.filter(function(el)){
 				if (el) return true;
 				return false;
 			}
@@ -107,7 +107,7 @@
 				arr[i] = toID(arr[i]);
 				arr[i] = arr[i].replace(/\btm{0-9}[1-2]|\btm{0-9}[1-2]|\ble?ve?l{0-9}[1-2]/, "");
 			}
-			arr.filter(function(el){
+			arr.filter(function(el)){
 				if (el) return true;
 				return false;
 			}
