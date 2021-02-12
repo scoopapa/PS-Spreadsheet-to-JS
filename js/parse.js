@@ -65,7 +65,7 @@
 		},
 		abilities: function(abilities) {
 			abilities = abilities.replace(/hidden ability/i, '');
-			abilities = abilities.replace(/\(HA\)|\(DW\)/g, '');
+			abilities = abilities.replace(/HA|DW/g, '');
 			var abilArr = arrFromStr(abilities);
 			if (abilArr.length === 2) {// if there are only two abilities, the last one is the hidden ability
 				abilArr = [abilArr[0], "", abilArr[1]];
@@ -77,7 +77,7 @@
 			return buf;
 		},
 		stats: function(stats) {
-			stats = stats.replace(/[a-z]/g, '');
+			stats = stats.replace(/[a-zA-Z]*/g, '');
 			var statArr = arrFromStr(stats);
 			var buf = '{hp: ' + statArr[0];
 			if (statArr[1]) buf += ', atk: ' + statArr[1];
@@ -104,7 +104,7 @@
 			return arr;
 		},
 		moveRemovals: function(moveStr) {
-			moveStr = moveStr.replace(/\s?{0-9}[1-2]\s/,"|");
+			moveStr = moveStr.replace(/\s?{0-9}[1-2]\s/g,"|");
 			moveStr = moveStr.replace(/tm{0-9}[1-2]|tm{0-9}[1-2]|le?ve?l{0-9}[1-2]/g, "|");
 			var arr = arrFromStr(moveStr);
 			for (var i in arr) {
