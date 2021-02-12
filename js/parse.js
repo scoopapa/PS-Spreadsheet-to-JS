@@ -1,5 +1,5 @@
 (function(global) {
-	var sepChars = ['/',',','\t','\\.','\\\\',':',';'];
+	var sepChars = ['/',',','\t','\\.','\\\\',':',';' '\s-', '-\s'];
 	var removeChars = ['\\*','&','$','@','!','#','\\(','\\)','\\{','\\}','\\[','\\]','~','`','~','"',"'","none","---","----","-----"];
 	var arrFromStr = function(str) { // Turns strings separated by chars in sepChars into arrays
 		for( var c of sepChars ) str = str.replace(new RegExp(c, "g"), '|');
@@ -91,12 +91,26 @@
 		// moveAdditions and moveRemovals return arrays instead of strings
 		moveAdditions: function(moveStr) {
 			var arr = arrFromStr(moveStr);
-			for (var i in arr) arr[i] = toID(arr[i]);
+			for (var i in arr) {
+				arr[i] = toID(arr[i]);
+				arr[i] arr[i].replace(/\btm{0-9}[1-2]|\btm{0-9}[1-2]|\ble?ve?l{0-9}[1-2]/, "");
+			}
+			arr.filter(function(el){
+				if (el) return true;
+				return false;
+			}
 			return arr;
 		},
 		moveRemovals: function(moveStr) {
 			var arr = arrFromStr(moveStr);
-			for (var i in arr) arr[i] = toID(arr[i]);
+			for (var i in arr) {
+				arr[i] = toID(arr[i]);
+				arr[i] arr[i].replace(/\btm{0-9}[1-2]|\btm{0-9}[1-2]|\ble?ve?l{0-9}[1-2]/, "");
+			}
+			arr.filter(function(el){
+				if (el) return true;
+				return false;
+			}
 			return arr;
 		},
 		weight: function(weight) {
