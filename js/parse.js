@@ -222,10 +222,7 @@
 							else if (table.slice(0,4) === 'move') pData[table][newID] = [].concat(pData[table][id]);
 							else if (
 								!(table === "baseSpecies" || table === "forme") ||
-								!(
-									(toID(pData["forme"][id]) in data.regions) ||
-									(data.dexInfo && id in data.dexInfo)
-								)
+								!(data.dexInfo && id in data.dexInfo)
 							) {
 								pData[table][newID] = pData[table][id];
 							}
