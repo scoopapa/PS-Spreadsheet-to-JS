@@ -171,6 +171,7 @@
 			forme: {},
 		}
 		var getForme = function(name) {
+			name = name.replace(/"/g, "");
 			let nameArr = ["", name];
 			var forme = false;
 			if (!name.includes(" ") && !name.includes("-")) return nameArr;
@@ -205,8 +206,8 @@
 			}
 			buf = buf.slice(0, buf.lastIndexOf("-"));
 			var toReturn = {
-				baseSpecies: res[1],
-				forme: buf,
+				baseSpecies: '"' + res[1] + '"',
+				forme: '"' + buf + '"',
 			}
 			return toReturn;
 		}
