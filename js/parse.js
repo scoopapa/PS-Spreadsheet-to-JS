@@ -379,12 +379,12 @@
 			var name = pData.name[id] ? pData.name[id] : id;
 			buf += newLine(`// ${name}`, indent);			
 			if (hasAdd) {
-				for (var moveid of pData[key][id]) {
+				for (var moveid of pData["moveAdditions"][id]) {
 					buf += newLine(`this.modData("Learnsets", "${id}").learnset.${moveid} = ["8L1"];`, indent);
 				}
 			}
 			if (hasRem) {
-				for (var moveid of pData[key][id]) {
+				for (var moveid of pData["moveRemovals"][id]) {
 					buf += newLine(`delete this.modData('Learnsets', '${id}').learnset.${moveid};`, indent);
 				}
 			}
