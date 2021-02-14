@@ -367,7 +367,7 @@
 		var buf = "";
 		for (var id of pData.ids) {
 			if (!id) continue;
-			if (id in data.dexInfo === false) continue;
+			// if (id in data.dexInfo === false) continue;
 			var hasAdd = false;
 			var hasRem = false;
 			var key = "moveAdditions";
