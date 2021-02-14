@@ -7,7 +7,7 @@ var loadDefaultSettings = function() {
 		defaultDoublesTier: "DOU",
 		dexIndent: 1,
 		learnsetsIndent: 1,
-		scriptsIndent: 1,
+		scriptsIndent: 2,
 		formatsIndent: 1,
 		initDexNum: 1001,
 	};
