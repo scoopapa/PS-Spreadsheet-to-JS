@@ -396,6 +396,7 @@
 		var buf = "";
 		for (var id of pData.ids) {
 			if (!id) continue;
+			var key = "tier";
 			if ((
 					( settings.dex.useDefaultTier === "fakeOnly" && id in data.dexInfo ) || 
 					( settings.dex.useDefaultTier === 'none' )
@@ -404,8 +405,6 @@
 			) continue;
 			// id and open bracket
 			buf += newLine(`${id}: {`, indent);
-			
-			var key = "tier";
 			var val = pData[key][id] || settings.dex.defaultTier;
 			buf += newLine(`${key}: "${val}",`, indent + 1);
 			
