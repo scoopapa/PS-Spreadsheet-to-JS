@@ -376,7 +376,7 @@
 			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) hasRem = true;
 			if (!hasAdd && !hasRem) continue;
 			
-			var name = pData.name[id] ? pData.name[id] : id;
+			var name = pData.name[id] ? pData.name[id].replace(/"/g, "") : id;
 			buf += newLine(`// ${name}`, indent);			
 			if (hasAdd) {
 				for (var moveid of pData["moveAdditions"][id]) {
