@@ -34,7 +34,7 @@
 				for (var i in ids) {
 					ids[i] = toID(ids[i]);
 					// if (!ids[i]) delete ids[i];
-					else inputRow[ids[i]] = i;
+					inputRow[ids[i]] = i;
 				}
 			} else { // if name list is not given, create dummy ids based on the first property that has data
 				for (var key in settings.dex.dataInputTypes) {
@@ -44,7 +44,7 @@
 							let j = Number(i) + 1;
 							ids[i] = "pkmn" + j;
 							// if (!arr[i]) delete ids[i];
-							else inputRow[ids[i]] = i;
+							inputRow[ids[i]] = i;
 						}
 						break;
 					}
@@ -65,7 +65,7 @@
 			return acc;
 		},
 		basePower: function(BP) {
-			if (!Number(BP)) return "true";
+			if (!Number(BP)) return "0";
 			return BP.replace(/[a-z]/g, '').trim();
 		},
 		powerPoints: function(PP) {
