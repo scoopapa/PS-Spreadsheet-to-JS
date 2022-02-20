@@ -61,10 +61,11 @@
 		},
 		accuracy: function(acc) {
 			acc = acc.replace(/[a-z]/g, '').replace('%', '').trim();
-			if (acc === '101') acc = "true";
+			if (!Number(acc) || Number(acc) > 100) return "true";
 			return acc;
 		},
 		basePower: function(BP) {
+			if (!Number(BP)) return "true";
 			return BP.replace(/[a-z]/g, '').trim();
 		},
 		powerPoints: function(PP) {
