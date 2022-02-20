@@ -60,7 +60,7 @@
 			return '"' + type.trim() + '"';
 		},
 		accuracy: function(acc) {
-			acc = acc.replace(/[a-z]/g, '').trim();
+			acc = acc.replace(/[a-z]/g, '').replace('%', '').trim();
 			if (acc === '101') acc = "true";
 			return acc;
 		},
@@ -74,7 +74,7 @@
 			return PP;
 		},
 		category: function(category) {
-			return '"' + name.trim() + '"';
+			return '"' + category.trim() + '"';
 		},
 	};
 	var parseDexColumn = function(key, ids) {
@@ -124,7 +124,7 @@
 	};
 	//moves.ts
 	global.get1MoveJS = function(id, pData){
-		var indent = settings.dex.dexIndent;
+		var indent = settings.dex.movesIndent;
 		var buf = "";
 		if (!id) return buf;
 		// id and open bracket
