@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded",
 			
 			ajaxUtils.sendGetRequest( "html/pkmn-output.html", function(rStr){
 				var pData = window.parseDexInputs(pData);
-				var moveStr = window.getMoveJS(pData);
+				var moveStr = window.getMovesJS(pData);
 				
 				ajaxUtils.sendGetRequest( "html/pkmn-output-item.html", function(r){
 					var buf = ""
