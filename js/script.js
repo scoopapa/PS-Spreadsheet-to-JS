@@ -94,44 +94,19 @@ document.addEventListener("DOMContentLoaded",
 		var loadOutputPkmn = function() { // View Code Output
 			showLoading("#current-page");
 			currentPage = "pkmn-output";
-
-			var isDexData = false;
-			var isLearnData = false;
-			var isFormatsData = true;
-			for (var key in settings.dex.dataInputTypes) {
-				if (settings.dex.dataInputTypes[key] && (key === "moveAdditions" || key === "moveRemovals")) isLearnData = true;
-				else if (settings.dex.dataInputTypes[key] && key !== "name") isDexData = true;
-			}
-			if (!isDexData && !isLearnData) isDexData = true;
+			
 			ajaxUtils.sendGetRequest( "html/pkmn-output.html", function(rStr){
 				var pData = window.parseDexInputs(pData);
-				var dexStr = isDexData ? window.getPokedexJS(pData) : "";
+				var moveStr = isDexData ? window.getMoveJS(pData) : "";
 				var learnsetStr = isLearnData ? window.getLearnsetsJS(pData) : "";
 				var scriptsStr = isLearnData ? window.getScriptsJS(pData) : "";
 				var formatsDataStr = isDexData ? window.getFormatsDataJS(pData) : "";
 				
 				ajaxUtils.sendGetRequest( "html/pkmn-output-item.html", function(r){
 					var buf = ""
-					if (isDexData) {
-						buf += insertProperty( r, "id", "pokedex-js" );
-						buf = insertProperty( buf, "title", "pokedex.ts");
-						buf = insertProperty( buf, "jsData", dexStr );
-					}
-					if (learnsetStr !== "") {
-						buf += insertProperty( r, "id", "learnsets-js" );
-						buf = insertProperty( buf, "title", "learnsets.ts");
-						buf = insertProperty( buf, "jsData", learnsetStr );
-					}
-					if (scriptsStr !== "") {
-						buf += insertProperty( r, "id", "scripts-js" );
-						buf = insertProperty( buf, "title", "scripts.ts");
-						buf = insertProperty( buf, "jsData", scriptsStr );
-					}
-					if (formatsDataStr !== "") {
-						buf += insertProperty( r, "id", "formats-data-js" );
-						buf = insertProperty( buf, "title", "formats-data.ts" );
-						buf = insertProperty( buf, "jsData", formatsDataStr );
-					}
+					buf += insertProperty( r, "id", "move-js" );
+					buf = insertProperty( buf, "title", "moves.ts");
+					buf = insertProperty( buf, "jsData", moveStr );
 					rStr = insertProperty( rStr, "content", buf )
 					changePage(rStr);
 				}, false );

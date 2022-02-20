@@ -82,7 +82,7 @@
 		var obj = {};
 		for (let i in ids) {
 			if (arr[i]) for( var c of removeChars) arr[i] = arr[i].replace(new RegExp(c, "g"), '');
-			if (arr[i]) obj[ids[i]] = parseMoveFunctions[key](arr[i]);
+			if (arr[i]) obj[ids[i]] = parseDexFunctions[key](arr[i]);
 		};
 		return obj;
 	};
@@ -93,7 +93,7 @@
 		for (var iType in data.inputTypes) {
 			parsedData[iType] = {};
 		}
-		parseMoveFunctions.setIDs(parsedData);
+		parseDexFunctions.setIDs(parsedData);
 		var ids = parsedData.ids
 		for (var key in settings.dex.dataInputTypes) {
 			if (settings.dex.dataInputTypes[key]) parsedData[key] = parseDexColumn(key, ids);
@@ -124,32 +124,8 @@
 	};
 	//moves.ts
 	global.getMovesJS = function( pData = global.parseDexInputs() ) {
-		var indent = settings.dex.scriptsIndent;
-		var buf = "";
-		for (var id of pData.ids) {
-			if (!id) continue;
-			// if (id in data.dexInfo === false) continue;
-			var hasAdd = false;
-			var hasRem = false;
-			var key = "moveAdditions";
-			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) hasAdd = true;
-			key = "moveRemovals";
-			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) hasRem = true;
-			if (!hasAdd && !hasRem) continue;
-			
-			var name = pData.name[id] ? pData.name[id].replace(/"/g, "") : id;
-			buf += newLine(`// ${name}`, indent);			
-			if (hasAdd) {
-				for (var moveid of pData["moveAdditions"][id]) {
-					buf += newLine(`this.modData("Learnsets", "${id}").learnset.${moveid} = ["8L1"];`, indent);
-				}
-			}
-			if (hasRem) {
-				for (var moveid of pData["moveRemovals"][id]) {
-					buf += newLine(`delete this.modData('Learnsets', '${id}').learnset.${moveid};`, indent);
-				}
-			}
-		}
+		var indent = settings.dex.movesIndent;
+		var buf = "hi";
 		return buf;
 	}
 })(window);
