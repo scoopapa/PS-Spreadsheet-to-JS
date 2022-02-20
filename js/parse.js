@@ -33,8 +33,8 @@
 			if (ids[0]) {
 				for (var i in ids) {
 					ids[i] = toID(ids[i]);
-					// if (!ids[i]) delete ids[i];
-					inputRow[ids[i]] = i;
+					if (!ids[i]) delete ids[i];
+					else inputRow[ids[i]] = i;
 				}
 			} else { // if name list is not given, create dummy ids based on the first property that has data
 				for (var key in settings.dex.dataInputTypes) {
@@ -43,8 +43,8 @@
 						for (var i in arr) {
 							let j = Number(i) + 1;
 							ids[i] = "pkmn" + j;
-							// if (!arr[i]) delete ids[i];
-							inputRow[ids[i]] = i;
+							if (!arr[i]) delete ids[i];
+							else inputRow[ids[i]] = i;
 						}
 						break;
 					}
@@ -60,12 +60,12 @@
 			return '"' + type.trim() + '"';
 		},
 		accuracy: function(acc) {
-			acc = acc.replace(/[a-z]/g, '').replace('%', '').trim();
 			if (!Number(acc) || Number(acc) > 100) return "true";
+			acc = acc.replace(/[a-z]/g, '').replace('%', '').trim();
 			return acc;
 		},
 		basePower: function(BP) {
-			if (!Number(BP)) return "0";
+			if (!Number(BP)) return "true";
 			return BP.replace(/[a-z]/g, '').trim();
 		},
 		powerPoints: function(PP) {
@@ -92,7 +92,7 @@
 		var arr = data.inputData[key].split('\n'); // separate each input into an array by newline char, then parse each element individually
 		var obj = {};
 		for (let i in ids) {
-			if (arr[i]) for( var c of removeChars) arr[i] = arr[i].replace(new RegExp(c, "g"), '');
+			// if (arr[i]) for( var c of removeChars) arr[i] = arr[i].replace(new RegExp(c, "g"), '');
 			if (arr[i]) obj[ids[i]] = parseMoveFunctions[key](arr[i]);
 		};
 		return obj;
@@ -139,7 +139,7 @@
 		var buf = "";
 		if (!id) return buf;
 		// id and open bracket
-		buf += newLine(`${id}: { //not implemented`, indent);
+		buf += newLine(`${id}: {`, indent);
 		// inherit
 		// if (id in data.dexInfo) buf += newLine(`inherit: true,`, indent + 1);
 		for (var key of outputProps) {
