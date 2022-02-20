@@ -4,19 +4,11 @@ var data = { // loaded dynamically
 };
 data.inputTypes = {
 	name: "Name",
-	types: "Types",
-	abilities: "Abilities",
-	stats: "Stats",
-	moveAdditions: "Movepool Additions",
-	moveRemovals: "Movepool Removals",
-	weight: "Weight",
-	height: "Height",
-	evos: "Evos",
-	prevo: "Prevo",
-	gender: "Gender",
-	eggGroups: "Egg Groups",
-	tier: "Tier",
-	doublesTier: "Doubles Tier",
+	type: "Type",
+	accuracy: "Accuracy",
+	basePower: "Base Power",
+	powerPoints: "PP",
+	category: "Category",
 };
 data.inputData = {};
 for (var iType in data.inputTypes) {
@@ -77,6 +69,6 @@ data.regions = {
 	},
 };
 
-ajaxUtils.sendGetRequest( "js/data/pokedex.js", function(r){
-	data.dexInfo = r;
-}, true ); 
+// ajaxUtils.sendGetRequest( "js/data/pokedex.js", function(r){
+	// data.dexInfo = r;
+// }, true ); 
