@@ -151,14 +151,12 @@
 	global.get1MoveJS = function(id, pData){
 		var indent = settings.dex.movesIndent;
 		var buf = "";
-		var num = 1000;
 		if (!id) return buf;
 		buf += newLine(`// Not Fully Implemented`, indent);
 		// id and open bracket
 		buf += newLine(`${id}: {`, indent);
 		// inherit
 		// if (id in data.dexInfo) buf += newLine(`inherit: true,`, indent + 1);
-		buf += newLine(`num: ,` + num, indent + 1);
 		for (var key of outputProps) {
 			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
 				buf += newLine(`${outputStr[key]}: ${pData[key][id]},`, indent + 1);
