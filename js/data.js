@@ -9,6 +9,7 @@ data.inputTypes = {
 	basePower: "Base Power",
 	powerPoints: "PP",
 	category: "Category",
+	description: "Description",
 };
 data.inputData = {};
 for (var iType in data.inputTypes) {

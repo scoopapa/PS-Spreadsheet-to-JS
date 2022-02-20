@@ -9,7 +9,7 @@ var loadDefaultSettings = function() {
 	for (var iType in data.inputTypes) {
 		settings.dex.dataInputTypes[iType] = false;
 	}
-	for (var iType of ["name", "type", "accuracy", "basePower", "powerPoints", "category"]) {
+	for (var iType of ["name", "type", "accuracy", "basePower", "powerPoints", "category", "description"]) { // Default Settings
 		settings.dex.dataInputTypes[iType] = true;
 	}
 };

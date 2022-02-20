@@ -75,18 +75,9 @@
 			if ((PP * 0.625) % 1 === 0) return PP * 0.625;
 			return PP;
 		},
-		category: function(category) {
-			return '"' + category.trim() + '"';
+		description: function(desc) {
+			return desc;
 		},
-		priority: function(priority) {
-			return "0";
-		},
-		secondary: function(priority) {
-			return "null";
-		},
-		flags: function(flags) {
-			
-		}
 	};
 	var parseDexColumn = function(key, ids) {
 		var arr = data.inputData[key].split('\n'); // separate each input into an array by newline char, then parse each element individually
@@ -138,9 +129,10 @@
 		secondary: "secondary",
 		target: "target",
 		type: "type",
+		description: "desc",
 	};
 	var outputProps =  [
-		'num', 'name', 'accuracy', 'basePower', 'category', 'powerPoints', 'priority', 'flags', 'secondary', 'target', 'type'
+		'num', 'name', 'accuracy', 'basePower', 'category', 'powerPoints', 'priority', 'flags', 'secondary', 'target', 'type', 'desc'
 	];
 	var newLine = function(str, indent) {
 		var buf = "";
