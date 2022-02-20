@@ -70,12 +70,19 @@
 		powerPoints: function(PP) {
 			PP = PP.replace(/[a-z]/g, '').trim();
 			PP = Number(PP);
-			PP = PP * 0.625;
+			if (PP % 5 === 0) return PP;
+			if ((PP * 0.625) % 1 === 0) return PP * 0.625;
 			return PP;
 		},
 		category: function(category) {
 			return '"' + category.trim() + '"';
 		},
+		priority: function(priority) {
+			
+		}
+		flags: function(flags) {
+			
+		}
 	};
 	var parseDexColumn = function(key, ids) {
 		var arr = data.inputData[key].split('\n'); // separate each input into an array by newline char, then parse each element individually
