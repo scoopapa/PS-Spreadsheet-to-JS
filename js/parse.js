@@ -152,7 +152,7 @@
 		var indent = settings.dex.movesIndent;
 		var buf = "";
 		if (!id) return buf;
-		buf += newLine(`// Not Implemented`, indent);
+		buf += newLine(`// Not Fully Implemented`, indent);
 		// id and open bracket
 		buf += newLine(`${id}: {`, indent);
 		// inherit
@@ -162,9 +162,9 @@
 				buf += newLine(`${outputStr[key]}: ${pData[key][id]},`, indent + 1);
 			}
 		}
-		// buf += newLine(`priority: 0,`, indent + 1);
-		// buf += newLine(`flags: {protect: 1, mirror: 1},`, indent + 1);
-		// buf += newLine(`target: "normal",`, indent + 1);
+		buf += newLine(`priority: 0,`, indent + 1);
+		buf += newLine(`flags: {protect: 1, mirror: 1},`, indent + 1);
+		buf += newLine(`target: "normal",`, indent + 1);
 		buf += newLine(`},`, indent);
 		return buf
 	}
