@@ -78,8 +78,11 @@
 			return '"' + category.trim() + '"';
 		},
 		priority: function(priority) {
-			
-		}
+			return "0";
+		},
+		secondary: function(priority) {
+			return "null";
+		},
 		flags: function(flags) {
 			
 		}
