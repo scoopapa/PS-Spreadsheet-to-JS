@@ -139,7 +139,7 @@
 		var buf = "";
 		if (!id) return buf;
 		// id and open bracket
-		buf += newLine(`${id}: {`, indent);
+		buf += newLine(`${id}: { //not implemented`, indent);
 		// inherit
 		// if (id in data.dexInfo) buf += newLine(`inherit: true,`, indent + 1);
 		for (var key of outputProps) {
