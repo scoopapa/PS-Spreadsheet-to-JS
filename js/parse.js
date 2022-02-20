@@ -138,7 +138,7 @@
 		var indent = settings.dex.movesIndent;
 		var buf = "";
 		if (!id) return buf;
-		buf += newLine(`// Not Implemented`, indent);
+		buf += newLine(`// Not Fully Implemented`, indent);
 		// id and open bracket
 		buf += newLine(`${id}: {`, indent);
 		// inherit
