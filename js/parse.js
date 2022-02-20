@@ -65,7 +65,7 @@
 			return acc;
 		},
 		basePower: function(BP) {
-			if (!Number(BP)) return "true";
+			if (!Number(BP)) return "0";
 			return BP.replace(/[a-z]/g, '').trim();
 		},
 		powerPoints: function(PP) {
@@ -148,6 +148,9 @@
 				buf += newLine(`${outputStr[key]}: ${pData[key][id]},`, indent + 1);
 			}
 		}
+		buf += newLine(`priority: 0,`, indent + 1);
+		buf += newLine(`flags: {protect: 1, mirror: 1},`, indent + 1);
+		buf += newLine(`target: "normal",`, indent + 1);
 		buf += newLine(`},`, indent);
 		return buf
 	}
