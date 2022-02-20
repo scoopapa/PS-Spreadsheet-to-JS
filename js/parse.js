@@ -33,7 +33,7 @@
 			if (ids[0]) {
 				for (var i in ids) {
 					ids[i] = toID(ids[i]);
-					if (!ids[i]) delete ids[i];
+					// if (!ids[i]) delete ids[i];
 					else inputRow[ids[i]] = i;
 				}
 			} else { // if name list is not given, create dummy ids based on the first property that has data
@@ -43,7 +43,7 @@
 						for (var i in arr) {
 							let j = Number(i) + 1;
 							ids[i] = "pkmn" + j;
-							if (!arr[i]) delete ids[i];
+							// if (!arr[i]) delete ids[i];
 							else inputRow[ids[i]] = i;
 						}
 						break;
