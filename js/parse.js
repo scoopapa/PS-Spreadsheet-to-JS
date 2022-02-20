@@ -60,8 +60,8 @@
 			return '"' + type.trim() + '"';
 		},
 		accuracy: function(acc) {
-			if (!Number(acc) || Number(acc) > 100) return "true";
 			acc = acc.replace(/[a-z]/g, '').replace('%', '').trim();
+			if (!Number(acc) || Number(acc) > 100) return "true";
 			return acc;
 		},
 		basePower: function(BP) {
