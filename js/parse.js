@@ -82,7 +82,7 @@
 		var obj = {};
 		for (let i in ids) {
 			if (arr[i]) for( var c of removeChars) arr[i] = arr[i].replace(new RegExp(c, "g"), '');
-			if (arr[i]) obj[ids[i]] = parseDexFunctions[key](arr[i]);
+			if (arr[i]) obj[ids[i]] = parseMoveFunctions[key](arr[i]);
 		};
 		return obj;
 	};
@@ -93,7 +93,7 @@
 		for (var iType in data.inputTypes) {
 			parsedData[iType] = {};
 		}
-		parseDexFunctions.setIDs(parsedData);
+		parseMoveFunctions.setIDs(parsedData);
 		var ids = parsedData.ids
 		for (var key in settings.dex.dataInputTypes) {
 			if (settings.dex.dataInputTypes[key]) parsedData[key] = parseDexColumn(key, ids);
