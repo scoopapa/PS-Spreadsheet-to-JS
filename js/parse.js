@@ -123,9 +123,28 @@
 		return buf + str + '\n';
 	};
 	//moves.ts
+	global.get1MoveJS = function(id, pData){
+		var indent = settings.dex.dexIndent;
+		var buf = "";
+		if (!id) return buf;
+		// id and open bracket
+		buf += newLine(`${id}: {`, indent);
+		// inherit
+		// if (id in data.dexInfo) buf += newLine(`inherit: true,`, indent + 1);
+		for (var key of outputProps) {
+			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) {
+				buf += newLine(`${outputStr[key]}: ${pData[key][id]},`, indent + 1);
+			}
+		}
+		buf += newLine(`},`, indent);
+		return buf
+	}
 	global.getMovesJS = function( pData = global.parseDexInputs() ) {
 		var indent = settings.dex.movesIndent;
-		var buf = "hi";
+		var buf = "";
+		for (var id of pData.ids) {
+			buf += get1MoveJS(id, pData);
+		}
 		return buf;
 	}
 })(window);
