@@ -97,10 +97,7 @@ document.addEventListener("DOMContentLoaded",
 			
 			ajaxUtils.sendGetRequest( "html/pkmn-output.html", function(rStr){
 				var pData = window.parseDexInputs(pData);
-				var moveStr = isDexData ? window.getMoveJS(pData) : "";
-				var learnsetStr = isLearnData ? window.getLearnsetsJS(pData) : "";
-				var scriptsStr = isLearnData ? window.getScriptsJS(pData) : "";
-				var formatsDataStr = isDexData ? window.getFormatsDataJS(pData) : "";
+				var moveStr = window.getMoveJS(pData);
 				
 				ajaxUtils.sendGetRequest( "html/pkmn-output-item.html", function(r){
 					var buf = ""
