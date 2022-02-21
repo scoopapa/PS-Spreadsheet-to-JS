@@ -75,6 +75,9 @@
 			if ((PP * 0.625) % 1 === 0) return PP * 0.625;
 			return PP;
 		},
+		category: function(category) {
+			return '"' + category.trim() + '"';
+		},
 		description: function(desc) {
 			return desc;
 		},
