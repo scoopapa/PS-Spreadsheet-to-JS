@@ -12,4 +12,3 @@ Make different kinds of forme detection optional
 Improve UI/CSS
 
 Implement gender/color
-"# SS2PDME" 
