@@ -79,7 +79,7 @@
 			return '"' + category.trim() + '"';
 		},
 		description: function(desc) {
-			return desc;
+			return '"' + desc.trim() + '"';
 		},
 	};
 	var parseDexColumn = function(key, ids) {
