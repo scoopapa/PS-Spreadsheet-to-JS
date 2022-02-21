@@ -84,6 +84,7 @@
 		var obj = {};
 		for (let i in ids) {
 			// if (arr[i]) for( var c of removeChars) arr[i] = arr[i].replace(new RegExp(c, "g"), '');
+			console.log(key);
 			if (arr[i]) obj[ids[i]] = parseMoveFunctions[key](arr[i]);
 		};
 		return obj;
