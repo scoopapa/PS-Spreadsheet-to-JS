@@ -132,7 +132,7 @@
 		description: "desc",
 	};
 	var outputProps =  [
-		'num', 'name', 'accuracy', 'basePower', 'category', 'powerPoints', 'priority', 'flags', 'secondary', 'target', 'type', 'desc'
+		'num', 'name', 'accuracy', 'basePower', 'category', 'powerPoints', 'priority', 'flags', 'secondary', 'target', 'type', 'description'
 	];
 	var newLine = function(str, indent) {
 		var buf = "";
