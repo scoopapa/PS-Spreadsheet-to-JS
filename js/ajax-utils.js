@@ -24,6 +24,7 @@
 	};
 	function handleResponse(request, responseHandler, isJsonResponse) {
 	  if ((request.readyState == 4) && (request.status == 200)) {
+		console.log(request);
 		// Default to isJsonResponse = true
 		if (isJsonResponse == undefined) {
 		  isJsonResponse = true;
