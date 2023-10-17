@@ -380,7 +380,7 @@
 			buf += newLine(`// ${name}`, indent);			
 			if (hasAdd) {
 				for (var moveid of pData["moveAdditions"][id]) {
-					buf += newLine(`this.modData("Learnsets", "${id}").learnset.${moveid} = ["8L1"];`, indent);
+					buf += newLine(`this.modData("Learnsets", "${id}").learnset.${moveid} = ["9L1"];`, indent);
 				}
 			}
 			if (hasRem) {
