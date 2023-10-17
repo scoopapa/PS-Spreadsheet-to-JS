@@ -342,7 +342,7 @@
 		var key = "moveAdditions";
 		if (hasAdd) {
 			for (var moveid of pData[key][id]) {
-				buf += newLine(`${moveid}: ["8L1"],`, indent + 2);
+				buf += newLine(`${moveid}: ["9L1"],`, indent + 2);
 			}
 		}
 		key = "moveRemovals";
