@@ -79,4 +79,5 @@ data.regions = {
 
 ajaxUtils.sendGetRequest( "js/data/pokedex.js", function(r){
 	data.dexInfo = r;
+	console.log(r);
 }, true ); 
