@@ -53,7 +53,7 @@
 			pData.ids = ids;
 		},
 		// parsing functions
-		name: function(name) {
+		species: function(name) {
 			return '"' + name.trim() + '"';
 		},
 		types: function(types) {
@@ -236,7 +236,7 @@
 				if (id !== newID) {
 					for (var table in pData) {
 						if (pData[table][id]) {
-							if (table === 'name') pData[table][newID] = extraData.baseSpecies[id] + '-' + extraData.forme[id];
+							if (table === 'species') pData[table][newID] = extraData.baseSpecies[id] + '-' + extraData.forme[id];
 							else if (table.slice(0,4) === 'move') pData[table][newID] = [].concat(pData[table][id]);
 							else if (
 								!(table === "baseSpecies" || table === "forme") ||
