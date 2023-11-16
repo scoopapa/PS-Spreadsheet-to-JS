@@ -3,7 +3,7 @@ var data = { // loaded dynamically
 	learnsetsInfo: null,
 };
 data.inputTypes = {
-	name: "Name",
+	species: "Species",
 	types: "Types",
 	abilities: "Abilities",
 	stats: "Stats",

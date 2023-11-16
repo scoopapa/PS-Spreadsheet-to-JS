@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded",
 								item = r;
 								item = insertProperty(item, "row", JSON.stringify(data.getInputRow(pData.inputRow[id])));
 								item = insertProperty(item, "rowNum", pData.inputRow[id]);
-								item = insertProperty(item, "name", pData.name[id].replace('"', '').replace('"', ''));
+								item = insertProperty(item, "species", pData.species[id].replace('"', '').replace('"', ''));
 								item = insertProperty(item, "tooltip", window.get1DexJS(id, pData));
 								buf += item;
 							}
@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded",
 			var isFormatsData = true;
 			for (var key in settings.dex.dataInputTypes) {
 				if (settings.dex.dataInputTypes[key] && (key === "moveAdditions" || key === "moveRemovals")) isLearnData = true;
-				else if (settings.dex.dataInputTypes[key] && key !== "name") isDexData = true;
+				else if (settings.dex.dataInputTypes[key] && key !== "species") isDexData = true;
 			}
 			if (!isDexData && !isLearnData) isDexData = true;
 			ajaxUtils.sendGetRequest( "html/pkmn-output.html", function(rStr){
@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded",
 			var tagN = page === "data-column-input-main" ? "textarea" : "input";
 			if (page) {
 				var fields = document.getElementsByTagName(tagN);
-				var e1 = data.inputData["name"]
+				var e1 = data.inputData["species"]
 				for (var field of fields) {
 					if (page === "data-single-input-main") {
 						if (editingRow === -1) {
