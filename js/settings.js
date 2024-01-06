@@ -15,7 +15,7 @@ var loadDefaultSettings = function() {
 	for (var iType in data.inputTypes) {
 		settings.dex.dataInputTypes[iType] = false;
 	}
-	for (var iType of ["species", "types", "abilities", "stats"]) {
+	for (var iType of ["name", "types", "abilities", "stats"]) {
 		settings.dex.dataInputTypes[iType] = true;
 	}
 };

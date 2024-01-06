@@ -28,7 +28,7 @@
 	};
 	var parseDexFunctions = { // list of functions to get stringified values for each pokedex.js property
 		setIDs: function(pData) { // gets a list of pokemon ids for the exported code
-			var ids = data.inputData.species.split('\n');
+			var ids = data.inputData.name.split('\n');
 			var inputRow = pData.inputRow;
 			if (ids[0]) {
 				for (var i in ids) {
@@ -53,7 +53,7 @@
 			pData.ids = ids;
 		},
 		// parsing functions
-		species: function(name) {
+		name: function(name) {
 			return '"' + name.trim() + '"';
 		},
 		types: function(types) {
@@ -185,7 +185,7 @@
 			if ( toID(nameArr[0]) === "mega" ) return nameArr;
 			for (var regionid in data.regions) {
 				if (data.regions[regionid].iden.includes( toID(nameArr[0]) )) {
-					nameArr[0] = data.regions[regionid].species;
+					nameArr[0] = data.regions[regionid].name;
 					forme = true;
 					break;
 				}
@@ -217,13 +217,13 @@
 				if(!id) continue;
 				pData.num[id] = i;
 				i++;
-				if (!pData.species[id]) {
-					pData.species[id] = id;
+				if (!pData.name[id]) {
+					pData.name[id] = id;
 					continue;
 				}
 				if (data.dexInfo && id in data.dexInfo) continue;
-				var formeData = getFormes( pData.species[id] );
-				if (formeData.baseSpecies !== pData.species[id]) {
+				var formeData = getFormes( pData.name[id] );
+				if (formeData.baseSpecies !== pData.name[id]) {
 					extraData.baseSpecies[id] = formeData.baseSpecies;
 					extraData.forme[id] = formeData.forme;
 				}
@@ -236,7 +236,7 @@
 				if (id !== newID) {
 					for (var table in pData) {
 						if (pData[table][id]) {
-							if (table === 'species') pData[table][newID] = extraData.baseSpecies[id] + '-' + extraData.forme[id];
+							if (table === 'name') pData[table][newID] = extraData.baseSpecies[id] + '-' + extraData.forme[id];
 							else if (table.slice(0,4) === 'move') pData[table][newID] = [].concat(pData[table][id]);
 							else if (
 								!(table === "baseSpecies" || table === "forme") ||
@@ -273,7 +273,7 @@
 	var outputStr = {
 		inherit: "inherit",
 		num: "num",
-		species: "species",
+		name: "name",
 		baseSpecies: "baseSpecies",
 		forme: "forme",
 		types: "types",
@@ -288,7 +288,7 @@
 		eggGroups: "eggGroups",
 	};
 	var outputProps =  [
-		'num', 'species', 'baseSpecies', 'forme', 'types', 'gender', 
+		'num', 'name', 'baseSpecies', 'forme', 'types', 'gender', 
 		'stats', 'abilities', 'height', 'weight', 'color', 'prevo', 
 		'evos', 'eggGroups'
 	];
@@ -376,7 +376,7 @@
 			if (pData[key] && pData[key][id] && settings.dex.dataInputTypes[key] !== false) hasRem = true;
 			if (!hasAdd && !hasRem) continue;
 			
-			var name = pData.species[id] ? pData.species[id].replace(/"/g, "") : id;
+			var name = pData.name[id] ? pData.name[id].replace(/"/g, "") : id;
 			buf += newLine(`// ${name}`, indent);			
 			if (hasAdd) {
 				for (var moveid of pData["moveAdditions"][id]) {
