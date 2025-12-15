@@ -274,7 +274,7 @@
 	var outputStr = {
 		inherit: "inherit",
 		num: "num",
-		name: "species",
+		name: "name",
 		baseSpecies: "baseSpecies",
 		forme: "forme",
 		types: "types",
