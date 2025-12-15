@@ -264,7 +264,7 @@
 		}
 		parseDexFunctions.setIDs(parsedData);
 		var ids = parsedData.ids
-		for (var key in settings.dex.dataInputTypes) {
+		for (var key of settings.dex.dataInputTypes) {
 			if (settings.dex.dataInputTypes[key]) parsedData[key] = parseDexColumn(key, ids);
 		}
 		parsedData = processData(parsedData);
