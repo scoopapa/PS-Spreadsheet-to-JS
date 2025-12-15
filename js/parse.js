@@ -156,6 +156,7 @@
 	};
 	var parseDexColumn = function(key, ids) {
 		console.log("key: " + key + "| ids: " + ids);
+		if (!data.inputData[key]) return;
 		var arr = data.inputData[key].split('\n'); // separate each input into an array by newline char, then parse each element individually
 		var obj = {};
 		for (let i in ids) {
